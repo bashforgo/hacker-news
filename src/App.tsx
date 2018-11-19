@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import logoSvg from './logo.svg'
 
-class App extends Component {
-  render() {
+export class App extends Component {
+  public render(): JSX.Element {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={logoSvg} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.tsx</code> and save to reload.
           </p>
@@ -21,8 +21,6 @@ class App extends Component {
           </a>
         </header>
       </div>
-    );
+    )
   }
 }
-
-export default App;
