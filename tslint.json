@@ -29,6 +29,17 @@
       {
         "react": "React"
       }
-    ]
+    ],
+    "function-name": [
+      true,
+      {
+        "method-regex": "^[a-z][\\w\\d]+$",
+        "private-method-regex": "^_[\\w\\d]+$",
+        "protected-method-regex": "^[a-z][\\w\\d]+$",
+        "static-method-regex": "^[A-Z_\\d]+$",
+        "function-regex": "^[a-zA-Z][\\w\\d]+$"
+      }
+    ],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
   }
 }
