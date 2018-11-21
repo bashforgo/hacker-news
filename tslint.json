@@ -40,6 +40,16 @@
         "function-regex": "^[a-zA-Z][\\w\\d]+$"
       }
     ],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case",
+      "allow-leading-underscore"
+    ],
+    "no-any": true,
+    "object-literal-sort-keys": false,
+    "no-switch-case-fall-through": true,
+    "jsx-boolean-value": false
   }
 }

@@ -14,7 +14,8 @@
     "noEmit": true,
     "jsx": "preserve",
     "lib": ["es6", "dom"],
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "importHelpers": true
   },
   "include": ["src"]
 }
