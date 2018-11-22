@@ -1,4 +1,3 @@
-import { Grid } from '@material-ui/core'
 import {
   StyleRules,
   StyleRulesCallback,
@@ -8,11 +7,9 @@ import {
 } from '@material-ui/core/styles'
 import { Error } from '@material-ui/icons'
 import React, { Component, ReactNode } from 'react'
+import FullPage from '../FullPage/FullPage'
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
-  container: {
-    height: '100vh',
-  },
   icon: {
     fontSize: theme.typography.h1.fontSize,
   },
@@ -23,16 +20,9 @@ class ErrorPage extends Component<WithStyles> {
     const { classes }: ErrorPage['props'] = this.props
 
     return (
-      <Grid
-        container
-        alignItems="center"
-        justify="center"
-        className={classes.container}
-      >
-        <Grid item>
-          <Error className={classes.icon} color="error" />
-        </Grid>
-      </Grid>
+      <FullPage>
+        <Error className={classes.icon} color="error" />
+      </FullPage>
     )
   }
 }

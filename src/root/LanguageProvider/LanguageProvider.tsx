@@ -5,6 +5,7 @@ import { I18nextProvider } from 'react-i18next'
 import Async from '../../Async/Async'
 import ErrorPage from '../../ErrorPage/ErrorPage'
 import { setup } from '../../i18n'
+import LoadingPage from '../../LoadingPage/LoadingPage'
 import { noop } from '../../util'
 
 interface LanguageProviderState {
@@ -29,6 +30,9 @@ class LanguageProvider extends React.Component<{}, LanguageProviderState> {
   public render(): ReactNode {
     return (
       <Async promise={this._i18n}>
+        <Async.Pending>
+          <LoadingPage />
+        </Async.Pending>
         <Async.Resolved>
           {(i18next: i18n): ReactNode => {
             return (
