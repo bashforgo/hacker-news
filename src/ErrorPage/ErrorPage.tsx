@@ -5,7 +5,7 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core/styles'
-import { Error } from '@material-ui/icons'
+import { AlertCircle } from 'mdi-material-ui'
 import React, { Component, ReactNode } from 'react'
 import FullPage from '../FullPage/FullPage'
 
@@ -21,7 +21,7 @@ class ErrorPage extends Component<WithStyles> {
 
     return (
       <FullPage>
-        <Error className={classes.icon} color="error" />
+        <AlertCircle className={classes.icon} color="error" />
       </FullPage>
     )
   }

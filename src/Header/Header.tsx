@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography } from '@material-ui/core'
-import { CallSplit } from '@material-ui/icons'
+import { Hackernews } from 'mdi-material-ui'
 import React, { Component, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'
 
@@ -10,7 +10,7 @@ class Header extends Component<WithNamespaces> {
     return (
       <AppBar>
         <Toolbar>
-          <CallSplit />
+          <Hackernews />
           <Typography variant="h6">{t('appName')}</Typography>
         </Toolbar>
       </AppBar>
