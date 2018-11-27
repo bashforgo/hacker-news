@@ -1,0 +1,13 @@
+{
+  "settings": "Settings",
+  "language": "Language",
+  "languages": {
+    "en-GB": "English (UK)",
+    "en-US": "English (US)"
+  },
+  "theme": "Theme",
+  "themes": {
+    "light": "Light",
+    "dark": "Dark"
+  }
+}

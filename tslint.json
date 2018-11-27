@@ -50,6 +50,7 @@
     "no-any": true,
     "object-literal-sort-keys": false,
     "no-switch-case-fall-through": true,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "prefer-array-literal": [true, { "allow-type-parameters": true }]
   }
 }

@@ -1,5 +1,5 @@
 import { i18n } from 'i18next'
-import { BindAll, Once } from 'lodash-decorators'
+import { Bind, Once } from 'lodash-decorators'
 import React, { ReactNode } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import Async from '../../Async/Async'
@@ -13,17 +13,18 @@ interface LanguageProviderState {
 }
 
 export interface LanguageContextType {
+  selectedLanguage: string
   setLanguage(language: string): void
 }
 
+const DEFAULT_LANGUAGE: string = 'en-GB'
 export const LanguageContext: React.Context<
   LanguageContextType
 > = React.createContext({
+  selectedLanguage: DEFAULT_LANGUAGE,
   setLanguage: noop,
 })
-const DEFAULT_LANGUAGE: string = 'en-GB'
 
-@BindAll()
 class LanguageProvider extends React.Component<{}, LanguageProviderState> {
   public state: LanguageProviderState = { language: DEFAULT_LANGUAGE }
 
@@ -53,6 +54,7 @@ class LanguageProvider extends React.Component<{}, LanguageProviderState> {
 
   private _getLanguageContext(i18next: i18n): LanguageContextType {
     return {
+      selectedLanguage: this.state.language,
       setLanguage: (language: string): void => {
         if (this.state.language !== language) {
           i18next.changeLanguage(language)
@@ -62,6 +64,7 @@ class LanguageProvider extends React.Component<{}, LanguageProviderState> {
     }
   }
 
+  @Bind()
   @Once()
   private _i18n(): Promise<i18n> {
     return setup(this.state.language)

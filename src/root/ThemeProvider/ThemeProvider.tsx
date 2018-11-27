@@ -5,8 +5,8 @@ import {
   PaletteType,
   Theme,
 } from '@material-ui/core'
-import { BindAll, Memoize } from 'lodash-decorators'
-import React, { Props, ReactNode } from 'react'
+import { Bind, Memoize } from 'lodash-decorators'
+import React, { ReactNode } from 'react'
 import { noop } from '../../util'
 
 interface ThemeProviderState {
@@ -14,21 +14,26 @@ interface ThemeProviderState {
 }
 
 export interface ThemeContextType {
-  toggleTheme(): void
+  selectedTheme: PaletteType
+  setTheme(theme: PaletteType): void
 }
 
+const DEFAULT_THEME: PaletteType = 'dark'
 export const ThemeContext: React.Context<
   ThemeContextType
 > = React.createContext({
-  toggleTheme: noop,
-})
+  selectedTheme: DEFAULT_THEME,
+  setTheme: noop,
+} as ThemeContextType)
 
-@BindAll()
 class ThemeProvider extends React.Component<{}, ThemeProviderState> {
-  public state: ThemeProviderState = { theme: 'dark' }
+  public state: ThemeProviderState = { theme: DEFAULT_THEME }
 
   public render(): ReactNode {
-    const themeContext: ThemeContextType = { toggleTheme: this._toggleTheme }
+    const themeContext: ThemeContextType = {
+      selectedTheme: this.state.theme,
+      setTheme: this._setTheme,
+    }
 
     return (
       <MuiThemeProvider theme={this._getTheme(this.state.theme)}>
@@ -40,10 +45,9 @@ class ThemeProvider extends React.Component<{}, ThemeProviderState> {
     )
   }
 
-  private _toggleTheme(): void {
-    this.setState({
-      theme: this.state.theme === 'dark' ? 'light' : 'dark',
-    })
+  @Bind()
+  private _setTheme(theme: PaletteType): void {
+    this.setState({ theme })
   }
 
   @Memoize()
