@@ -7,7 +7,13 @@ import ErrorPage from '../../ErrorPage/ErrorPage'
 import { setup } from '../../i18n'
 import LoadingPage from '../../LoadingPage/LoadingPage'
 import { noop } from '../../util'
+import {
+  Storage,
+  withStorage,
+  WithStorage,
+} from '../StorageProvider/StorageProvider'
 
+interface LanguageProviderProps extends WithStorage<LanguageProviderState> {}
 interface LanguageProviderState {
   language: string
 }
@@ -25,8 +31,17 @@ export const LanguageContext: React.Context<
   setLanguage: noop,
 })
 
-class LanguageProvider extends React.Component<{}, LanguageProviderState> {
+class LanguageProvider extends React.Component<
+  LanguageProviderProps,
+  LanguageProviderState
+> {
   public state: LanguageProviderState = { language: DEFAULT_LANGUAGE }
+  constructor(props: LanguageProviderProps) {
+    super(props)
+    this.state = {
+      language: props.storage.get('language') || DEFAULT_LANGUAGE,
+    }
+  }
 
   public render(): ReactNode {
     return (
@@ -58,6 +73,7 @@ class LanguageProvider extends React.Component<{}, LanguageProviderState> {
       setLanguage: (language: string): void => {
         if (this.state.language !== language) {
           i18next.changeLanguage(language)
+          this.props.storage.set('language', language)
           this.setState({ language })
         }
       },
@@ -71,4 +87,4 @@ class LanguageProvider extends React.Component<{}, LanguageProviderState> {
   }
 }
 
-export default LanguageProvider
+export default withStorage('language')(LanguageProvider)

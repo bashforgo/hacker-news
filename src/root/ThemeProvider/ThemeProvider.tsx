@@ -8,6 +8,9 @@ import {
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { ReactNode } from 'react'
 import { noop } from '../../util'
+import { WithStorage, withStorage } from '../StorageProvider/StorageProvider'
+
+interface ThemeProviderProps extends WithStorage<ThemeProviderState> {}
 
 interface ThemeProviderState {
   theme: PaletteType
@@ -26,19 +29,27 @@ export const ThemeContext: React.Context<
   setTheme: noop,
 } as ThemeContextType)
 
-class ThemeProvider extends React.Component<{}, ThemeProviderState> {
-  public state: ThemeProviderState = { theme: DEFAULT_THEME }
+class ThemeProvider extends React.Component<
+  ThemeProviderProps,
+  ThemeProviderState
+> {
+  constructor(props: ThemeProviderProps) {
+    super(props)
+    this.state = {
+      theme: props.storage.get('theme') || DEFAULT_THEME,
+    }
+  }
 
   public render(): ReactNode {
-    const themeContext: ThemeContextType = {
-      selectedTheme: this.state.theme,
-      setTheme: this._setTheme,
-    }
-
     return (
-      <MuiThemeProvider theme={this._getTheme(this.state.theme)}>
+      <MuiThemeProvider theme={this._createMuiTheme(this.state.theme)}>
         <CssBaseline />
-        <ThemeContext.Provider value={themeContext}>
+        <ThemeContext.Provider
+          value={{
+            setTheme: this._setTheme,
+            selectedTheme: this.state.theme,
+          }}
+        >
           {this.props.children}
         </ThemeContext.Provider>
       </MuiThemeProvider>
@@ -47,11 +58,14 @@ class ThemeProvider extends React.Component<{}, ThemeProviderState> {
 
   @Bind()
   private _setTheme(theme: PaletteType): void {
-    this.setState({ theme })
+    if (this.state.theme !== theme) {
+      this.setState({ theme })
+      this.props.storage.set('theme', theme)
+    }
   }
 
   @Memoize()
-  private _getTheme(type: PaletteType): Theme {
+  private _createMuiTheme(type: PaletteType): Theme {
     return createMuiTheme({
       palette: { type },
       typography: {
@@ -61,4 +75,4 @@ class ThemeProvider extends React.Component<{}, ThemeProviderState> {
   }
 }
 
-export default ThemeProvider
+export default withStorage('theme')(ThemeProvider)
