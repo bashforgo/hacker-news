@@ -1,4 +1,4 @@
-import React, {
+import {
   Children,
   cloneElement,
   Component,
@@ -6,6 +6,7 @@ import React, {
   ReactElement,
   ReactNode,
 } from 'react'
+import { PENDING, REJECTED, RESOLVED, StatefulPromise } from '../util'
 import Pending from './Pending'
 import Rejected, { RejectedProps } from './Rejected'
 import Resolved, { ResolvedProps } from './Resolved'
@@ -14,16 +15,14 @@ export interface AsyncProps<T> {
   promise(): Promise<T>
 }
 
-type AsyncPromiseState = 'pending' | 'resolved' | 'rejected'
 interface StateToChild<T = unknown> {
-  pending: null | ReactElement<{}>
-  resolved: null | ReactElement<ResolvedProps<T>>
-  rejected: null | ReactElement<RejectedProps>
+  [PENDING]: null | ReactElement<{}>
+  [RESOLVED]: null | ReactElement<ResolvedProps<T>>
+  [REJECTED]: null | ReactElement<RejectedProps>
 }
 
 interface AsyncState<T> {
-  promise: Promise<T>
-  state: AsyncPromiseState
+  promise: StatefulPromise<T>
   data?: T
   error?: Error
 }
@@ -33,48 +32,49 @@ class Async<T> extends Component<AsyncProps<T>, AsyncState<T>> {
   public static Rejected: typeof Rejected = Rejected
   public static Resolved: typeof Resolved = Resolved
   private static _emptyStateToChild: StateToChild = {
-    pending: null,
-    resolved: null,
-    rejected: null,
+    [PENDING]: null,
+    [RESOLVED]: null,
+    [REJECTED]: null,
   }
 
   public constructor(props: Async<T>['props']) {
     super(props)
-    const promise: Promise<T> = this.props.promise()
-    this.state = {
-      promise,
-      state: 'pending',
-    }
+    const promise: StatefulPromise<T> = new StatefulPromise(props.promise())
+    this.state = { promise }
   }
 
   public componentDidMount(): void {
-    this.state.promise
+    this.state.promise.value
       .then((result: T) =>
         this.setState({
           data: result,
-          state: 'resolved',
         }),
       )
       .catch((error: unknown) =>
         this.setState({
           error: error instanceof Error ? error : new Error(`${error}`),
-          state: 'rejected',
         }),
       )
   }
 
   public render(): ReactNode {
     const stateToChild: StateToChild<T> = this._getStateToChild()
+    let element:
+      | null
+      | ReactElement<ResolvedProps<T>>
+      | ReactElement<RejectedProps> = null
 
-    switch (this.state.state) {
-      case 'pending':
-        return stateToChild.pending
-      case 'resolved':
-        if (!stateToChild.resolved) return null
-        return cloneElement(stateToChild.resolved, { data: this.state.data })
-      case 'rejected':
-        if (!stateToChild.rejected) return null
-        return cloneElement(stateToChild.rejected, { error: this.state.error })
+    switch (this.state.promise.state) {
+      case PENDING:
+        return stateToChild[PENDING]
+      case RESOLVED:
+        element = stateToChild[RESOLVED]
+        if (!element) return null
+        return cloneElement(element, { data: this.state.data })
+      case REJECTED:
+        element = stateToChild[REJECTED]
+        if (!element) return null
+        return cloneElement(element, { error: this.state.error })
     }
   }
 
@@ -85,13 +85,13 @@ class Async<T> extends Component<AsyncProps<T>, AsyncState<T>> {
 
       switch (child.type) {
         case Pending:
-          result.pending = result.pending || child
+          result[PENDING] = result[PENDING] || child
           break
         case Resolved:
-          result.resolved = result.resolved || child
+          result[RESOLVED] = result[RESOLVED] || child
           break
         case Rejected:
-          result.rejected = result.rejected || child
+          result[REJECTED] = result[REJECTED] || child
           break
         default:
           this._dieInvalidChild()
