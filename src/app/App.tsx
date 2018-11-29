@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Header from '../Header/Header'
+import HeadlineList from '../HeadlineList/HeadlineList'
 import Root from '../Root/Root'
 
 class App extends Component {
@@ -7,6 +8,7 @@ class App extends Component {
     return (
       <Root>
         <Header />
+        <HeadlineList />
       </Root>
     )
   }
