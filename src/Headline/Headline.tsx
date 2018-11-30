@@ -10,6 +10,7 @@ import React, { Component, ReactNode } from 'react'
 import { Trans, withNamespaces, WithNamespaces } from 'react-i18next'
 import { getItem, Item, ItemId, Snapshot, Story } from '../api'
 import Link from '../Link/Link'
+import { interleave } from '../util'
 
 interface HeadlineProps {
   id: ItemId
@@ -27,7 +28,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   link: {
     color: theme.palette.primary.light,
   },
-  userLink: {
+  inline: {
     display: 'inline-block',
   },
 })
@@ -61,34 +62,49 @@ class Headline extends Component<
     if (!item) return null
     switch (item.type) {
       case 'story': {
-        const { title, score, by, url }: Story = item
+        const { title, score, by, url, descendants, id, time }: Story = item
         return (
           <Card component="li" className={classes.card}>
             <Link
-              href={url}
+              external={!!url}
+              href={url || `/item/${id}`}
               variant="body1"
-              color="inherit"
               className={classes.link}
             >
               {title}
             </Link>
-            <Typography variant="caption" color="textSecondary">
-              <Trans
-                i18nKey="subheader"
-                count={score}
-                values={{ by }}
-                components={[
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              className={classes.inline}
+            >
+              {interleave(
+                [
+                  t('points', { count: score }),
+                  t('by'),
                   <Link
-                    href=""
-                    className={classes.userLink}
-                    key="link"
+                    key="by"
+                    href={`/user/${by}`}
                     variant="inherit"
                     color="inherit"
+                    className={classes.inline}
                   >
-                    placeholder
+                    {by}
                   </Link>,
-                ]}
-              />
+                  t('time', { time }),
+                  '|',
+                  <Link
+                    key="comments"
+                    href={`/item/${id}`}
+                    variant="inherit"
+                    color="inherit"
+                    className={classes.inline}
+                  >
+                    {t('comments', { count: descendants })}
+                  </Link>,
+                ],
+                ' ',
+              )}
             </Typography>
           </Card>
         )

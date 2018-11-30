@@ -7,9 +7,17 @@ import {
   withStyles,
 } from '@material-ui/core/styles'
 import { TypographyProps } from '@material-ui/core/Typography'
-import React, { Component, ReactNode } from 'react'
+import classnames from 'classnames'
+import React, {
+  Component,
+  FunctionComponent,
+  ReactElement,
+  ReactNode,
+} from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 interface LinkProps extends TypographyProps {
+  external?: boolean
   href: string
   children: string
 }
@@ -24,15 +32,43 @@ const styles: StyleRulesCallback = (_theme: Theme): StyleRules => ({
   },
 })
 
+function withHref(href: string, external: boolean): FunctionComponent {
+  return function Anchor({
+    children,
+    ...other
+  }: {
+    children?: ReactNode
+  }): ReactElement<{}> {
+    return external ? (
+      <a href={href} {...other}>
+        {children}
+      </a>
+    ) : (
+      <RouterLink to={href} {...other}>
+        {children}
+      </RouterLink>
+    )
+  }
+}
+
 class Link extends Component<LinkProps & WithStyles> {
   public render(): ReactNode {
-    const { classes, href, children, ...other }: Link['props'] = this.props
+    const {
+      classes,
+      href,
+      children,
+      className,
+      external = false,
+      ...other
+    }: Link['props'] = this.props
 
     return (
-      <Typography {...other}>
-        <a href={href} className={classes.link}>
-          {children}
-        </a>
+      <Typography
+        className={classnames(classes.link, className)}
+        component={withHref(href, external)}
+        {...other}
+      >
+        {children}
       </Typography>
     )
   }

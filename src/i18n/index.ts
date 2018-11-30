@@ -1,7 +1,10 @@
+import { formatDistance, Locale } from 'date-fns'
 import i18next, { i18n } from 'i18next'
 import { isDev } from '../util'
 
 export function setup(initLanguage: string): Promise<i18n> {
+  let currentLocale: Locale | undefined
+
   return new Promise(
     (resolve: (i: i18n) => void, reject: (e: Error) => void): void => {
       i18next
@@ -37,6 +40,26 @@ export function setup(initLanguage: string): Promise<i18n> {
             ns: 'shared',
             interpolation: {
               escapeValue: false,
+              formatSeparator: '|',
+              format(
+                value: unknown,
+                format?: string,
+                language?: string,
+              ): string {
+                switch (format) {
+                  case 'distance': {
+                    if (typeof value !== 'number') {
+                      throw new Error('invalid distance value')
+                    }
+                    return formatDistance(new Date(1000 * value), new Date(), {
+                      addSuffix: true,
+                      locale: currentLocale,
+                    })
+                  }
+                  default:
+                    throw new Error('formatter not implemented')
+                }
+              },
             },
             react: {
               wait: true,
@@ -50,6 +73,20 @@ export function setup(initLanguage: string): Promise<i18n> {
             }
           },
         )
+        .on('languageChanged', (language: string) => {
+          import(/* webpackInclude: /(en-GB|en-US)\/index.js$/ */ `date-fns/locale/${language}`)
+            .then(
+              (locale: Locale): void => {
+                currentLocale = locale
+              },
+            )
+            .catch((error: Error) => {
+              if (isDev()) {
+                // tslint:disable-next-line no-console
+                console.warn('locale not found', language, error)
+              }
+            })
+        })
     },
   )
 }

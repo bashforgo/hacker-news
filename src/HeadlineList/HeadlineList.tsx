@@ -6,12 +6,25 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core/styles'
+import { Bind } from 'lodash-decorators'
 import React, { Component, ReactNode } from 'react'
-import { getNewStories, ItemId, Items, Snapshot } from '../api'
+import {
+  getAskStories,
+  getBestStories,
+  getJobStories,
+  getNewStories,
+  getShowStories,
+  getTopStories,
+  ItemId,
+  Items,
+  Snapshot,
+} from '../api'
 import Headline from '../Headline/Headline'
 
+export type Feed = 'top' | 'new' | 'best' | 'ask' | 'show' | 'job'
+
 interface HeadlineListProps {
-  feed?: string
+  feed?: Feed
 }
 
 interface HeadlineListState {
@@ -68,12 +81,35 @@ class HeadlineList extends Component<
     )
   }
 
+  @Bind()
+  private _subscriber(snap: Snapshot<Items>): void {
+    this.setState({ items: snap.val().slice(0, 30) })
+  }
+
   private _subscibe(): void {
-    this._unsubscriber = getNewStories(
-      (snap: Snapshot<Items>): void => {
-        this.setState({ items: snap.val().slice(0, 30) })
-      },
-    )
+    const feed: Feed = this.props.feed || 'top'
+    console.log(this.props.feed)
+
+    switch (feed) {
+      case 'top':
+        this._unsubscriber = getTopStories(this._subscriber)
+        break
+      case 'new':
+        this._unsubscriber = getNewStories(this._subscriber)
+        break
+      case 'best':
+        this._unsubscriber = getBestStories(this._subscriber)
+        break
+      case 'ask':
+        this._unsubscriber = getAskStories(this._subscriber)
+        break
+      case 'show':
+        this._unsubscriber = getShowStories(this._subscriber)
+        break
+      case 'job':
+        this._unsubscriber = getJobStories(this._subscriber)
+        break
+    }
   }
 
   private _unsubscribe(): void {

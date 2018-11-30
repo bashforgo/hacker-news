@@ -1,6 +1,9 @@
-import React, { Component } from 'react'
+import { Typography } from '@material-ui/core'
+import React, { Component, ReactNode } from 'react'
+import { Route, RouteComponentProps, Switch } from 'react-router-dom'
+import FullPage from '../FullPage/FullPage'
 import Header from '../Header/Header'
-import HeadlineList from '../HeadlineList/HeadlineList'
+import HeadlineList, { Feed } from '../HeadlineList/HeadlineList'
 import Root from '../Root/Root'
 
 class App extends Component {
@@ -8,7 +11,18 @@ class App extends Component {
     return (
       <Root>
         <Header />
-        <HeadlineList />
+        <Switch>
+          <Route path="/:feed(top|new|best|ask|show|job)?" exact>
+            {({ match }: RouteComponentProps<{ feed: Feed }>): ReactNode => (
+              <HeadlineList feed={match.params.feed} />
+            )}
+          </Route>
+          <Route>
+            <FullPage>
+              <Typography variant="h2">404</Typography>
+            </FullPage>
+          </Route>
+        </Switch>
       </Root>
     )
   }
