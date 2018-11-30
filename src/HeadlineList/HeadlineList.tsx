@@ -71,7 +71,7 @@ class HeadlineList extends Component<
   private _subscibe(): void {
     this._unsubscriber = getNewStories(
       (snap: Snapshot<Items>): void => {
-        this.setState({ items: snap.val().slice(0, 5) })
+        this.setState({ items: snap.val().slice(0, 30) })
       },
     )
   }

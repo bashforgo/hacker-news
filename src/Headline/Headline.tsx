@@ -7,7 +7,9 @@ import {
   WithStyles,
 } from '@material-ui/core/styles'
 import React, { Component, ReactNode } from 'react'
+import { Trans, withNamespaces, WithNamespaces } from 'react-i18next'
 import { getItem, Item, ItemId, Snapshot, Story } from '../api'
+import Link from '../Link/Link'
 
 interface HeadlineProps {
   id: ItemId
@@ -24,14 +26,16 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   },
   link: {
     color: theme.palette.primary.light,
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
+  },
+  userLink: {
+    display: 'inline-block',
   },
 })
 
-class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
+class Headline extends Component<
+  HeadlineProps & WithStyles & WithNamespaces,
+  HeadlineState
+> {
   public state: HeadlineState = {}
   private _unsubscriber?: () => void
 
@@ -52,7 +56,7 @@ class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
 
   public render(): ReactNode {
     const { item }: this['state'] = this.state
-    const { classes }: this['props'] = this.props
+    const { classes, t }: this['props'] = this.props
 
     if (!item) return null
     switch (item.type) {
@@ -60,13 +64,31 @@ class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
         const { title, score, by, url }: Story = item
         return (
           <Card component="li" className={classes.card}>
-            <Typography variant="body1">
-              <a href={url} className={classes.link}>
-                {title}
-              </a>
-            </Typography>
+            <Link
+              href={url}
+              variant="body1"
+              color="inherit"
+              className={classes.link}
+            >
+              {title}
+            </Link>
             <Typography variant="caption" color="textSecondary">
-              {score} points by {by}
+              <Trans
+                i18nKey="subheader"
+                count={score}
+                values={{ by }}
+                components={[
+                  <Link
+                    href=""
+                    className={classes.userLink}
+                    key="link"
+                    variant="inherit"
+                    color="inherit"
+                  >
+                    placeholder
+                  </Link>,
+                ]}
+              />
             </Typography>
           </Card>
         )
@@ -92,4 +114,4 @@ class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
   }
 }
 
-export default withStyles(styles)(Headline)
+export default withNamespaces('Headline')(withStyles(styles)(Headline))

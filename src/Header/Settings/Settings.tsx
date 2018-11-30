@@ -88,16 +88,18 @@ class Settings extends Component<WithNamespaces & WithStyles> {
             <IconButton onClick={toggle} color="inherit">
               <SettingsIcon />
             </IconButton>
-            <ResponsiveDialog open={state} onClose={toggle}>
-              <DialogTitle>{t('settings')}</DialogTitle>
-              <DialogContent className={classes.dialogContent}>
-                <LanguageSettings />
-                <ThemeSettings />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={toggle}>{t('close')}</Button>
-              </DialogActions>
-            </ResponsiveDialog>
+            {state && (
+              <ResponsiveDialog open={state} onClose={toggle}>
+                <DialogTitle>{t('settings')}</DialogTitle>
+                <DialogContent className={classes.dialogContent}>
+                  <LanguageSettings />
+                  <ThemeSettings />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={toggle}>{t('close')}</Button>
+                </DialogActions>
+              </ResponsiveDialog>
+            )}
           </>
         )}
       </WithToggle>

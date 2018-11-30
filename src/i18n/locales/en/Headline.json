@@ -1,0 +1,4 @@
+{
+  "subheader": "{{ count }} point by <0>{{ by }}</0>",
+  "subheader_plural": "{{ count }} points by <0>{{ by }}</0>"
+}
