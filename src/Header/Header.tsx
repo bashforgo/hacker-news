@@ -68,7 +68,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 })
 
 class Header extends Component<WithNamespaces & WithStyles> {
-  private static _feeds: Feed[] = ['new', 'best', 'ask', 'show', 'job']
+  private static _feeds: Feed[] = ['top', 'new', 'best', 'ask', 'show', 'job']
 
   public render(): ReactNode {
     const { t, classes }: Header['props'] = this.props
@@ -79,7 +79,7 @@ class Header extends Component<WithNamespaces & WithStyles> {
           <Toolbar className={classes.toolbar}>
             <Breakpoint at="sm">
               <Breakpoint.Up>
-                <Link href="/" className={classes.home}>
+                <Link href="/top" className={classes.home}>
                   <Hackernews />
                   <Typography variant="h6" color="inherit">
                     {t('shared:appName')}
@@ -118,17 +118,6 @@ class Header extends Component<WithNamespaces & WithStyles> {
                       </Button>
                       <Drawer anchor="left" open={open} onClose={toggle}>
                         <List className={classes.drawer}>
-                          <ListItem key="top" button>
-                            <Link
-                              href="/"
-                              color="inherit"
-                              variant="h6"
-                              className={classes.feedLinkText}
-                              onClick={toggle}
-                            >
-                              {t('top')}
-                            </Link>
-                          </ListItem>
                           {Header._feeds.map((feed: Feed) => (
                             <ListItem key={feed} button>
                               <Link

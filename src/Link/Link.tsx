@@ -44,7 +44,7 @@ function withHref(href: string, external: boolean): FunctionComponent {
         {children}
       </a>
     ) : (
-      <NavLink to={href} exact activeClassName="isActive" {...other}>
+      <NavLink to={href} activeClassName="isActive" {...other}>
         {children}
       </NavLink>
     )
