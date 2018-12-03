@@ -1,4 +1,4 @@
-import { Card, Typography } from '@material-ui/core'
+import { Card } from '@material-ui/core'
 import {
   StyleRules,
   StyleRulesCallback,
@@ -7,10 +7,9 @@ import {
   WithStyles,
 } from '@material-ui/core/styles'
 import React, { Component, ReactNode } from 'react'
-import { Trans, withNamespaces, WithNamespaces } from 'react-i18next'
-import { getItem, Item, ItemId, Snapshot, Story } from '../api'
-import Link from '../Link/Link'
-import { interleave } from '../util'
+import { getItem, Item, ItemId, Snapshot } from '../api'
+import JobHeadline from './JobHeadline'
+import StoryHeadline from './StoryHeadline'
 
 interface HeadlineProps {
   id: ItemId
@@ -25,18 +24,9 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
     padding: theme.spacing.unit,
     margin: theme.spacing.unit,
   },
-  link: {
-    color: theme.palette.primary.light,
-  },
-  inline: {
-    display: 'inline-block',
-  },
 })
 
-class Headline extends Component<
-  HeadlineProps & WithStyles & WithNamespaces,
-  HeadlineState
-> {
+class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
   public state: HeadlineState = {}
   private _unsubscriber?: () => void
 
@@ -57,62 +47,33 @@ class Headline extends Component<
 
   public render(): ReactNode {
     const { item }: this['state'] = this.state
-    const { classes, t }: this['props'] = this.props
+    const { classes }: this['props'] = this.props
+    let render: ReactNode = null
 
     if (!item) return null
     switch (item.type) {
-      case 'story': {
-        const { title, score, by, url, descendants, id, time }: Story = item
-        return (
-          <Card component="li" className={classes.card}>
-            <Link
-              external={!!url}
-              href={url || `/item/${id}`}
-              variant="body1"
-              className={classes.link}
-            >
-              {title}
-            </Link>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              className={classes.inline}
-            >
-              {interleave(
-                [
-                  t('points', { count: score }),
-                  t('by'),
-                  <Link
-                    key="by"
-                    href={`/user/${by}`}
-                    variant="inherit"
-                    color="inherit"
-                    className={classes.inline}
-                  >
-                    {by}
-                  </Link>,
-                  t('time', { time }),
-                  '|',
-                  <Link
-                    key="comments"
-                    href={`/item/${id}`}
-                    variant="inherit"
-                    color="inherit"
-                    className={classes.inline}
-                  >
-                    {t('comments', { count: descendants })}
-                  </Link>,
-                ],
-                ' ',
-              )}
-            </Typography>
-          </Card>
-        )
-      }
-      default:
-        console.log('not implemented')
+      case 'story':
+        render = <StoryHeadline item={item} />
+        break
+      case 'job':
+        render = <JobHeadline item={item} />
+        break
+      case 'poll':
+        render = <StoryHeadline item={item} />
+        break
+      case 'pollopt':
         return null
+      case 'comment':
+        return null
+      default:
+        throw new Error(`unknown item type ${(item as Item).type}`)
     }
+
+    return (
+      <Card component="li" className={classes.card}>
+        {render}
+      </Card>
+    )
   }
 
   private _subscibe(): void {
@@ -130,4 +91,4 @@ class Headline extends Component<
   }
 }
 
-export default withNamespaces('Headline')(withStyles(styles)(Headline))
+export default withStyles(styles)(Headline)
