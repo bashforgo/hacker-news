@@ -33,19 +33,15 @@ export function setup(initLanguage: string): Promise<i18n> {
         })
         .init(
           {
+            debug: false,
             lng: initLanguage,
             fallbackLng: false,
-            debug: isDev(),
             defaultNS: 'shared',
             ns: 'shared',
             interpolation: {
               escapeValue: false,
               formatSeparator: '|',
-              format(
-                value: unknown,
-                format?: string,
-                language?: string,
-              ): string {
+              format(value: unknown, format?: string): string {
                 switch (format) {
                   case 'distance': {
                     if (typeof value !== 'number') {

@@ -25,7 +25,7 @@ import WithToggle from '../../WithToggle/WithToggle'
 import { OptionList } from './OptionList/OptionList'
 
 const withSettingsNamespace: ReturnType<typeof withNamespaces> = withNamespaces(
-  ['Settings', 'shared'],
+  'Settings',
 )
 
 const LanguageSettings: ComponentType = withSettingsNamespace(
@@ -88,18 +88,16 @@ class Settings extends Component<WithNamespaces & WithStyles> {
             <IconButton onClick={toggle} color="inherit">
               <SettingsIcon />
             </IconButton>
-            {state && (
-              <ResponsiveDialog open={state} onClose={toggle}>
-                <DialogTitle>{t('settings')}</DialogTitle>
-                <DialogContent className={classes.dialogContent}>
-                  <LanguageSettings />
-                  <ThemeSettings />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={toggle}>{t('close')}</Button>
-                </DialogActions>
-              </ResponsiveDialog>
-            )}
+            <ResponsiveDialog open={state} onClose={toggle}>
+              <DialogTitle>{t('settings')}</DialogTitle>
+              <DialogContent className={classes.dialogContent}>
+                <LanguageSettings />
+                <ThemeSettings />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={toggle}>{t('shared:close')}</Button>
+              </DialogActions>
+            </ResponsiveDialog>
           </>
         )}
       </WithToggle>

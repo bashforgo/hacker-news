@@ -14,12 +14,12 @@ import React, {
   ReactElement,
   ReactNode,
 } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 interface LinkProps extends TypographyProps {
   external?: boolean
   href: string
-  children: string
+  children: ReactNode
 }
 
 const styles: StyleRulesCallback = (_theme: Theme): StyleRules => ({
@@ -44,9 +44,9 @@ function withHref(href: string, external: boolean): FunctionComponent {
         {children}
       </a>
     ) : (
-      <RouterLink to={href} {...other}>
+      <NavLink to={href} exact activeClassName="isActive" {...other}>
         {children}
-      </RouterLink>
+      </NavLink>
     )
   }
 }

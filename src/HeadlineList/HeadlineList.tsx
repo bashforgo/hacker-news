@@ -52,12 +52,12 @@ class HeadlineList extends Component<
     this._subscibe()
   }
 
-  // public componentDidUpdate(prevProps: HeadlineListProps): void {
-  //   if (prevProps.id !== this.props.id) {
-  //     this._unsubscribe()
-  //     this._subscibe()
-  //   }
-  // }
+  public componentDidUpdate(prevProps: HeadlineListProps): void {
+    if (prevProps.feed !== this.props.feed) {
+      this._unsubscribe()
+      this._subscibe()
+    }
+  }
 
   public componentWillUnmount(): void {
     this._unsubscribe()
@@ -88,7 +88,6 @@ class HeadlineList extends Component<
 
   private _subscibe(): void {
     const feed: Feed = this.props.feed || 'top'
-    console.log(this.props.feed)
 
     switch (feed) {
       case 'top':
