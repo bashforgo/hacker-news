@@ -1,4 +1,4 @@
-import { Card } from '@material-ui/core'
+import { Card, Typography } from '@material-ui/core'
 import {
   StyleRules,
   StyleRulesCallback,
@@ -6,17 +6,15 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core/styles'
+import { Bind } from 'lodash-decorators'
 import React, { Component, ReactNode } from 'react'
 import { getItem, Item, ItemId, Snapshot } from '../api'
+import WithUpdates from '../WithUpdates/WithUpdates'
 import JobHeadline from './JobHeadline'
 import StoryHeadline from './StoryHeadline'
 
 interface HeadlineProps {
   id: ItemId
-}
-
-interface HeadlineState {
-  item?: Item
 }
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
@@ -26,41 +24,44 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   },
 })
 
-class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
-  public state: HeadlineState = {}
-  private _unsubscriber?: () => void
-
-  public componentDidMount(): void {
-    this._subscibe()
-  }
-
-  public componentDidUpdate(prevProps: HeadlineProps): void {
-    if (prevProps.id !== this.props.id) {
-      this._unsubscribe()
-      this._subscibe()
-    }
-  }
-
-  public componentWillUnmount(): void {
-    this._unsubscribe()
-  }
-
+class Headline extends Component<HeadlineProps & WithStyles> {
   public render(): ReactNode {
-    const { item }: this['state'] = this.state
-    const { classes }: this['props'] = this.props
-    let render: ReactNode = null
+    return <WithUpdates from={this._subscribe}>{this._renderItem}</WithUpdates>
+  }
 
-    if (!item) return null
+  @Bind()
+  private _subscribe(subscriber: (snap: Snapshot<Item>) => void): () => void {
+    return getItem(this.props.id, subscriber)
+  }
+
+  @Bind()
+  private _renderItem(item?: Item): ReactNode {
+    return (
+      <Card component="li" className={this.props.classes.card}>
+        {item ? this._item(item) : this._empty()}
+      </Card>
+    )
+  }
+
+  private _empty(): ReactNode {
+    return (
+      <>
+        <Typography variant="body1">???</Typography>
+        <Typography variant="caption" color="textSecondary">
+          ???
+        </Typography>
+      </>
+    )
+  }
+
+  private _item(item: Item): ReactNode {
     switch (item.type) {
       case 'story':
-        render = <StoryHeadline item={item} />
-        break
+        return <StoryHeadline item={item} />
       case 'job':
-        render = <JobHeadline item={item} />
-        break
+        return <JobHeadline item={item} />
       case 'poll':
-        render = <StoryHeadline item={item} />
-        break
+        return <StoryHeadline item={item} />
       case 'pollopt':
         return null
       case 'comment':
@@ -68,26 +69,6 @@ class Headline extends Component<HeadlineProps & WithStyles, HeadlineState> {
       default:
         throw new Error(`unknown item type ${(item as Item).type}`)
     }
-
-    return (
-      <Card component="li" className={classes.card}>
-        {render}
-      </Card>
-    )
-  }
-
-  private _subscibe(): void {
-    this._unsubscriber = getItem(
-      this.props.id,
-      (snap: Snapshot<Item>): void => {
-        this.setState({ item: snap.val() })
-      },
-    )
-  }
-
-  private _unsubscribe(): void {
-    if (this._unsubscriber) this._unsubscriber()
-    delete this._unsubscriber
   }
 }
 

@@ -11,7 +11,6 @@ import { Feed, FeedId, Item, ItemId, User, UserId } from './types'
 const projectId: string = 'hacker-news'
 const authDomain: string = `${projectId}.firebaseio.com`
 const databaseURL: string = `https://${authDomain}`
-const withVerison: (s: string) => string = (s: string): string => `v0/${s}`
 
 const firebase: Required<FirebaseApp> = app.initializeApp({
   authDomain,
@@ -20,12 +19,13 @@ const firebase: Required<FirebaseApp> = app.initializeApp({
 }) as Required<FirebaseApp>
 
 const database: FirebaseDatabase = firebase.database()
+const api: Reference = database.ref('v0')
 
 export interface Snapshot<T = unknown> extends DataSnapshot {
   val(): T
 }
 type SnapshotCallback<T = unknown> = (snap: Snapshot<T>) => void
-type Unsubscriber = () => void
+export type Unsubscriber = () => void
 
 function whenExists<T>(
   cb: SnapshotCallback<T>,
@@ -39,7 +39,7 @@ function withUnsubscriber<T>(
   path: string,
   cb: SnapshotCallback<T>,
 ): Unsubscriber {
-  const ref: Reference = database.ref(withVerison(path))
+  const ref: Reference = api.child(path)
   const off: ReturnType<Reference['off']> = ref.on('value', whenExists(cb))
   return (): void => {
     ref.off('value', off)
@@ -57,7 +57,7 @@ export function getUser(id: UserId, cb: SnapshotCallback<User>): Unsubscriber {
   return withUnsubscriber(`user/${id}`, cb)
 }
 
-type FeedReader = (cb: SnapshotCallback<Feed>) => Unsubscriber
+export type FeedReader = (cb: SnapshotCallback<Feed>) => Unsubscriber
 
 function getFeed(id: FeedId): FeedReader {
   return (cb: SnapshotCallback<Feed>): Unsubscriber => withUnsubscriber(id, cb)

@@ -1,3 +1,4 @@
+export * from './arrayEquals'
 export * from './environment'
 export * from './interleave'
 export * from './noop'
