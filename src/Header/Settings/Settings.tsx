@@ -85,7 +85,11 @@ class Settings extends Component<WithNamespaces & WithStyles> {
       <WithToggle initial={false}>
         {(state: boolean, toggle: () => void): ReactNode => (
           <>
-            <IconButton onClick={toggle} color="inherit">
+            <IconButton
+              onClick={toggle}
+              color="inherit"
+              aria-label={t('settings')}
+            >
               <SettingsIcon />
             </IconButton>
             <ResponsiveDialog open={state} onClose={toggle}>

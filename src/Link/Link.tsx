@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core/styles'
 import { TypographyProps } from '@material-ui/core/Typography'
 import classnames from 'classnames'
+import mem from 'mem'
 import React, {
   Component,
   FunctionComponent,
@@ -52,6 +53,11 @@ function withHref(href: string, external: boolean): FunctionComponent {
 }
 
 class Link extends Component<LinkProps & WithStyles> {
+  private _withHref: (
+    href: string,
+    external: boolean,
+  ) => FunctionComponent = mem(withHref)
+
   public render(): ReactNode {
     const {
       classes,
@@ -65,7 +71,7 @@ class Link extends Component<LinkProps & WithStyles> {
     return (
       <Typography
         className={classnames(classes.link, className)}
-        component={withHref(href, external)}
+        component={this._withHref(href, external)}
         {...other}
       >
         {children}

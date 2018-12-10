@@ -57,17 +57,16 @@ class HeadlineList extends Component<
 > {
   public render(): ReactNode {
     return (
-      <WithUpdates from={this._getFeedReader()}>
-        {(data?: Items): ReactNode => (
-          <Paginated
-            data={data || []}
-            page={this._getPage()}
-            pageSize={PAGE_SIZE}
-          >
-            {this._renderList}
-          </Paginated>
-        )}
-      </WithUpdates>
+      <WithUpdates from={this._getFeedReader()}>{this._paginated}</WithUpdates>
+    )
+  }
+
+  @Bind()
+  private _paginated(data: Items = []): ReactNode {
+    return (
+      <Paginated data={data} page={this._getPage()} pageSize={PAGE_SIZE}>
+        {this._renderList}
+      </Paginated>
     )
   }
 

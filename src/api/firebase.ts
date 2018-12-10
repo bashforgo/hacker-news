@@ -6,6 +6,7 @@ import {
   FirebaseDatabase,
   Reference,
 } from '@firebase/database-types'
+import mem from 'mem'
 import { Feed, FeedId, Item, ItemId, User, UserId } from './types'
 
 const projectId: string = 'hacker-news'
@@ -59,9 +60,10 @@ export function getUser(id: UserId, cb: SnapshotCallback<User>): Unsubscriber {
 
 export type FeedReader = (cb: SnapshotCallback<Feed>) => Unsubscriber
 
-function getFeed(id: FeedId): FeedReader {
-  return (cb: SnapshotCallback<Feed>): Unsubscriber => withUnsubscriber(id, cb)
-}
+const getFeed: (id: FeedId) => FeedReader = mem(
+  (id: FeedId): FeedReader => (cb: SnapshotCallback<Feed>): Unsubscriber =>
+    withUnsubscriber(id, cb),
+)
 
 export const getTopStories: FeedReader = getFeed('topstories')
 export const getNewStories: FeedReader = getFeed('newstories')
