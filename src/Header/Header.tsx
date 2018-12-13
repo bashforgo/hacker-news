@@ -122,7 +122,7 @@ class Header extends Component<WithNamespaces & WithStyles> {
                             <ListItem key={feed} button>
                               <Link
                                 href={`/${feed}`}
-                                color="inherit"
+                                color="textPrimary"
                                 variant="h6"
                                 className={classes.feedLinkText}
                                 onClick={toggle}

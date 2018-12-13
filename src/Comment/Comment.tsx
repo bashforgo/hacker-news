@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import {
   StyleRules,
@@ -7,20 +7,19 @@ import {
   withStyles,
   WithStyles,
 } from '@material-ui/core/styles'
-import { Bind } from 'lodash-decorators'
+import { Bind, Memoize } from 'lodash-decorators'
 import React, { Component, ComponentType, ReactNode } from 'react'
-import { withNamespaces, WithNamespaces } from 'react-i18next'
 import {
   Comment as CommentType,
   getItem,
-  Item,
   ItemId,
-  Snapshot,
+  Subscriber,
   Unsubscriber,
 } from '../api'
 import ContentHtml from '../ContentHtml/ContentHtml'
+import Link from '../Link/Link'
 import Time from '../Time/Time'
-import WithUpdates from '../WithUpdates/WithUpdates'
+import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 interface CommentProps {
   id: ItemId
@@ -77,7 +76,9 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 class Comment extends Component<CommentProps & WithStyles> {
   public render(): ReactNode {
     return (
-      <WithUpdates from={this._subscribe}>{this._renderComment}</WithUpdates>
+      <WithUpdates from={this._subscribe(this.props.id)}>
+        {this._renderComment}
+      </WithUpdates>
     )
   }
 
@@ -99,7 +100,17 @@ class Comment extends Component<CommentProps & WithStyles> {
             color="textSecondary"
             className={classes.inline}
           >
-            {by} <Time distance={time} />
+            {[
+              by,
+              ' ',
+              <Link
+                key="time"
+                href={`/item/${this.props.id}`}
+                className={classes.inline}
+              >
+                <Time distance={time} />
+              </Link>,
+            ]}
           </Typography>
           <ContentHtml>{text}</ContentHtml>
           {this._renderKids(comment)}
@@ -115,8 +126,10 @@ class Comment extends Component<CommentProps & WithStyles> {
   }
 
   @Bind()
-  private _subscribe(subscriber: (snap: Snapshot<Item>) => void): Unsubscriber {
-    return getItem(this.props.id, subscriber)
+  @Memoize()
+  private _subscribe(id: ItemId): WithUpdatesFrom<CommentType> {
+    return (subscriber: Subscriber<CommentType>): Unsubscriber =>
+      getItem(id, subscriber)
   }
 }
 

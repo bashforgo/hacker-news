@@ -1,8 +1,10 @@
 import { Component, ReactNode } from 'react'
-import { Snapshot } from '../api'
+import { Snapshot, Subscriber, Unsubscriber } from '../api'
+
+export type WithUpdatesFrom<T> = (subscriber: Subscriber<T>) => Unsubscriber
 
 interface WithUpdatesProps<T> {
-  from(subscriber: (snap: Snapshot<T>) => void): () => void
+  from: WithUpdatesFrom<T>
   children(data?: T): ReactNode
 }
 

@@ -25,21 +25,16 @@ const api: Reference = database.ref('v0')
 export interface Snapshot<T = unknown> extends DataSnapshot {
   val(): T
 }
-type SnapshotCallback<T = unknown> = (snap: Snapshot<T>) => void
+export type Subscriber<T = unknown> = (snap: Snapshot<T>) => void
 export type Unsubscriber = () => void
 
-function whenExists<T>(
-  cb: SnapshotCallback<T>,
-): (snap: Snapshot<T> | null) => void {
+function whenExists<T>(cb: Subscriber<T>): (snap: Snapshot<T> | null) => void {
   return (snap: Snapshot<T> | null): void => {
     if (snap) cb(snap)
   }
 }
 
-function withUnsubscriber<T>(
-  path: string,
-  cb: SnapshotCallback<T>,
-): Unsubscriber {
+function withUnsubscriber<T>(path: string, cb: Subscriber<T>): Unsubscriber {
   const ref: Reference = api.child(path)
   const off: ReturnType<Reference['off']> = ref.on('value', whenExists(cb))
   return (): void => {
@@ -49,19 +44,19 @@ function withUnsubscriber<T>(
 
 export function getItem<T extends Item>(
   id: ItemId,
-  cb: SnapshotCallback<T>,
+  cb: Subscriber<T>,
 ): Unsubscriber {
   return withUnsubscriber(`item/${id}`, cb)
 }
 
-export function getUser(id: UserId, cb: SnapshotCallback<User>): Unsubscriber {
+export function getUser(id: UserId, cb: Subscriber<User>): Unsubscriber {
   return withUnsubscriber(`user/${id}`, cb)
 }
 
-export type FeedReader = (cb: SnapshotCallback<Feed>) => Unsubscriber
+export type FeedReader = (cb: Subscriber<Feed>) => Unsubscriber
 
 const getFeed: (id: FeedId) => FeedReader = mem(
-  (id: FeedId): FeedReader => (cb: SnapshotCallback<Feed>): Unsubscriber =>
+  (id: FeedId): FeedReader => (cb: Subscriber<Feed>): Unsubscriber =>
     withUnsubscriber(id, cb),
 )
 

@@ -4,5 +4,7 @@
   "best": "best",
   "ask": "ask",
   "show": "show",
-  "job": "jobs"
+  "job": "jobs",
+  "poll": "poll",
+  "parent": "parent"
 }

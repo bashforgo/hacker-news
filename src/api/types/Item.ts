@@ -45,7 +45,6 @@ export interface Poll extends BaseItem {
 
 export interface PollOption extends BaseItem {
   type: 'pollopt'
-  descendants: number
   poll: ItemId
   score: number
   text: string

@@ -6,19 +6,12 @@ import {
   WithStyles,
   withStyles,
 } from '@material-ui/core/styles'
-import { Bind } from 'lodash-decorators'
+import { Bind, Memoize } from 'lodash-decorators'
 import React, { Component, ReactNode } from 'react'
-import {
-  FeedReader,
-  getItem,
-  Item,
-  ItemId,
-  Snapshot,
-  Unsubscriber,
-} from '../api'
+import { getItem, Item, ItemId, Subscriber, Unsubscriber } from '../api'
 import Comment from '../Comment/Comment'
 import Headline from '../Headline/Headline'
-import WithUpdates from '../WithUpdates/WithUpdates'
+import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 export interface ThreadProps {
   id: ItemId
@@ -36,12 +29,14 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 
 class Thread extends Component<ThreadProps & WithStyles> {
   public render(): ReactNode {
-    const { classes }: this['props'] = this.props
+    const { classes, id }: this['props'] = this.props
 
     return (
       <Grid container justify="center">
         <Grid item container direction="column" className={classes.container}>
-          <WithUpdates from={this._subscribe}>{this._renderItem}</WithUpdates>
+          <WithUpdates from={this._subscribe(id)}>
+            {this._renderItem}
+          </WithUpdates>
         </Grid>
       </Grid>
     )
@@ -53,24 +48,10 @@ class Thread extends Component<ThreadProps & WithStyles> {
 
     return (
       <>
-        <Headline id={this.props.id} wrapped={false} />
-        {this._renderText(data)}
+        <Headline id={this.props.id} expanded />
         {this._renderComments(data)}
       </>
     )
-  }
-
-  private _renderText(data: Item): ReactNode {
-    if ('text' in data) {
-      return (
-        <>
-          <span className={this.props.classes.spacer} />
-          <Typography dangerouslySetInnerHTML={{ __html: data.text }} />
-        </>
-      )
-    }
-
-    return null
   }
 
   private _renderComments(data: Item): ReactNode {
@@ -89,8 +70,10 @@ class Thread extends Component<ThreadProps & WithStyles> {
   }
 
   @Bind()
-  private _subscribe(subscriber: (snap: Snapshot<Item>) => void): Unsubscriber {
-    return getItem(this.props.id, subscriber)
+  @Memoize()
+  private _subscribe(id: ItemId): WithUpdatesFrom<Item> {
+    return (subscriber: Subscriber<Item>): Unsubscriber =>
+      getItem(id, subscriber)
   }
 }
 

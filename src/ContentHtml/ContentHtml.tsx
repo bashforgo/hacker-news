@@ -5,14 +5,11 @@ import {
   WithStyles,
   withStyles,
 } from '@material-ui/core/styles'
-import { rgbToHex } from '@material-ui/core/styles/colorManipulator'
-import {
-  Breakpoint,
-  Breakpoints,
-} from '@material-ui/core/styles/createBreakpoints'
-import React, { Component, CSSProperties, Fragment, ReactNode } from 'react'
+import classnames from 'classnames'
+import React, { Component, ReactNode } from 'react'
 
 interface ContentHtmlProps {
+  className?: string
   children: string
 }
 
@@ -60,11 +57,11 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 
 class ContentHtml extends Component<ContentHtmlProps & WithStyles> {
   public render(): ReactNode {
-    const { classes }: this['props'] = this.props
+    const { classes, className }: this['props'] = this.props
 
     return (
       <div
-        className={classes.content}
+        className={classnames(classes.content, className)}
         dangerouslySetInnerHTML={{ __html: this.props.children }}
       />
     )

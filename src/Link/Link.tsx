@@ -25,7 +25,6 @@ interface LinkProps extends TypographyProps {
 
 const styles: StyleRulesCallback = (_theme: Theme): StyleRules => ({
   link: {
-    color: 'inherit',
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
@@ -65,6 +64,8 @@ class Link extends Component<LinkProps & WithStyles> {
       children,
       className,
       external = false,
+      color = 'inherit',
+      variant = 'inherit',
       ...other
     }: Link['props'] = this.props
 
@@ -72,6 +73,7 @@ class Link extends Component<LinkProps & WithStyles> {
       <Typography
         className={classnames(classes.link, className)}
         component={this._withHref(href, external)}
+        {...{ color, variant }}
         {...other}
       >
         {children}

@@ -38,20 +38,6 @@ class Paginated<T = unknown> extends Component<
 
   public state: PaginatedState<T> = { paginated: [] }
 
-  public shouldComponentUpdate(
-    nextProps: PaginatedProps<T>,
-    nextState: PaginatedState<T>,
-  ): boolean {
-    const { data, children }: this['props'] = this.props
-    const { paginated }: this['state'] = this.state
-
-    return (
-      data.length !== nextProps.data.length ||
-      children !== nextProps.children ||
-      paginated !== nextState.paginated
-    )
-  }
-
   public render(): ReactNode {
     const { data, children, pageSize }: this['props'] = this.props
 

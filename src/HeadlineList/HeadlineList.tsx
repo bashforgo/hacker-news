@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@material-ui/core'
+import { Button, Card, Grid, Typography } from '@material-ui/core'
 import {
   StyleRules,
   StyleRulesCallback,
@@ -40,6 +40,10 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
     maxWidth: theme.spacing.unit * 120,
     flexGrow: 1,
   },
+  card: {
+    padding: theme.spacing.unit,
+    margin: theme.spacing.unit,
+  },
   pager: {
     display: 'flex',
     alignItems: 'center',
@@ -79,50 +83,58 @@ class HeadlineList extends Component<
         <Grid item component="ul" className={classes.list}>
           {items.map(
             (id: ItemId): ReactNode => (
-              <Headline id={id} key={id} />
+              <Card component="li" className={classes.card} key={id}>
+                <Headline id={id} />
+              </Card>
             ),
           )}
+          {this._renderPager(numberOfPages)}
         </Grid>
-        {numberOfPages ? (
-          <Grid
-            item
-            container
-            direction="row"
-            justify="center"
-            alignContent="center"
-            spacing={8}
-          >
-            <Grid item>
-              <Button
-                disabled={this._getPage() <= 0}
-                component={ButtonLinkTo(
-                  `/${this._getFeed()}/${this._getPage() - 1}`,
-                )}
-              >
-                {t('previous')}
-              </Button>
-            </Grid>
-            <Grid item className={classes.pager}>
-              <Typography>
-                {this._getPage()}
-                {' / '}
-                {numberOfPages}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button
-                disabled={this._getPage() >= numberOfPages}
-                component={ButtonLinkTo(
-                  `/${this._getFeed()}/${this._getPage() + 1}`,
-                )}
-              >
-                {t('next')}
-              </Button>
-            </Grid>
-          </Grid>
-        ) : null}
       </Grid>
     )
+  }
+
+  private _renderPager(numberOfPages: number): ReactNode {
+    const { classes, t }: this['props'] = this.props
+
+    return numberOfPages ? (
+      <Grid
+        item
+        container
+        direction="row"
+        justify="center"
+        alignContent="center"
+        spacing={8}
+      >
+        <Grid item>
+          <Button
+            disabled={this._getPage() <= 0}
+            component={ButtonLinkTo(
+              `/${this._getFeed()}/${this._getPage() - 1}`,
+            )}
+          >
+            {t('previous')}
+          </Button>
+        </Grid>
+        <Grid item className={classes.pager}>
+          <Typography>
+            {this._getPage()}
+            {' / '}
+            {numberOfPages}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            disabled={this._getPage() >= numberOfPages}
+            component={ButtonLinkTo(
+              `/${this._getFeed()}/${this._getPage() + 1}`,
+            )}
+          >
+            {t('next')}
+          </Button>
+        </Grid>
+      </Grid>
+    ) : null
   }
 
   private _getPage(): number {
