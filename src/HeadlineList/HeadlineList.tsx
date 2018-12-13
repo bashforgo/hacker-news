@@ -83,42 +83,44 @@ class HeadlineList extends Component<
             ),
           )}
         </Grid>
-        <Grid
-          item
-          container
-          direction="row"
-          justify="center"
-          alignContent="center"
-          spacing={8}
-        >
-          <Grid item>
-            <Button
-              disabled={this._getPage() <= 0}
-              component={ButtonLinkTo(
-                `/${this._getFeed()}/${this._getPage() - 1}`,
-              )}
-            >
-              {t('previous')}
-            </Button>
+        {numberOfPages ? (
+          <Grid
+            item
+            container
+            direction="row"
+            justify="center"
+            alignContent="center"
+            spacing={8}
+          >
+            <Grid item>
+              <Button
+                disabled={this._getPage() <= 0}
+                component={ButtonLinkTo(
+                  `/${this._getFeed()}/${this._getPage() - 1}`,
+                )}
+              >
+                {t('previous')}
+              </Button>
+            </Grid>
+            <Grid item className={classes.pager}>
+              <Typography>
+                {this._getPage()}
+                {' / '}
+                {numberOfPages}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button
+                disabled={this._getPage() >= numberOfPages}
+                component={ButtonLinkTo(
+                  `/${this._getFeed()}/${this._getPage() + 1}`,
+                )}
+              >
+                {t('next')}
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item className={classes.pager}>
-            <Typography>
-              {this._getPage()}
-              {' / '}
-              {numberOfPages}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              disabled={this._getPage() >= numberOfPages}
-              component={ButtonLinkTo(
-                `/${this._getFeed()}/${this._getPage() + 1}`,
-              )}
-            >
-              {t('next')}
-            </Button>
-          </Grid>
-        </Grid>
+        ) : null}
       </Grid>
     )
   }

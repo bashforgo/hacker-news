@@ -6,10 +6,11 @@ import {
   WithStyles,
   withStyles,
 } from '@material-ui/core/styles'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 import { WithNamespaces, withNamespaces } from 'react-i18next'
 import { Job } from '../api'
 import Link from '../Link/Link'
+import Time from '../Time/Time'
 import { interleave } from '../util'
 
 export interface JobHeadlineProps {
@@ -18,7 +19,11 @@ export interface JobHeadlineProps {
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   link: {
-    color: theme.palette.primary.light,
+    color: theme.palette.link.default,
+    '&:focus, &:active, &:visited': {
+      color: theme.palette.link.active,
+      outline: 'none',
+    },
   },
   inline: {
     display: 'inline-block',
@@ -31,6 +36,24 @@ function JobHeadline({
   t,
 }: JobHeadlineProps & WithStyles & WithNamespaces): ReactElement<{}> {
   const { title, score, by, url, id, time }: Job = item
+
+  const linkTo: (
+    key: string,
+    href: string,
+    children: ReactNode,
+  ) => ReactNode = (
+    key: string,
+    href: string,
+    children: ReactNode,
+  ): ReactNode => (
+    <Link
+      variant="inherit"
+      color="inherit"
+      className={classes.inline}
+      {...{ key, href, children }}
+    />
+  )
+
   return (
     <>
       <Link
@@ -50,16 +73,8 @@ function JobHeadline({
           [
             t('points', { count: score }),
             t('by'),
-            <Link
-              key="by"
-              href={`/user/${by}`}
-              variant="inherit"
-              color="inherit"
-              className={classes.inline}
-            >
-              {by}
-            </Link>,
-            t('time', { time }),
+            linkTo('by', `/user/${by}`, by),
+            linkTo('time', `/item/${id}`, <Time distance={time} key="time" />),
           ],
           ' ',
         )}

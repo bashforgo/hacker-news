@@ -5,6 +5,7 @@ import FullPage from '../FullPage/FullPage'
 import Header from '../Header/Header'
 import HeadlineList, { Feed } from '../HeadlineList/HeadlineList'
 import Root from '../Root/Root'
+import Thread from '../Thread/Thread'
 
 class App extends Component {
   public render(): JSX.Element {
@@ -25,6 +26,15 @@ class App extends Component {
                 page={Number(match.params.page || 0)}
               />
             )}
+          </Route>
+          <Route path="/item/:id">
+            {({
+              match,
+            }: RouteComponentProps<{
+              id?: string
+            }>): ReactNode =>
+              match.params.id ? <Thread id={Number(match.params.id)} /> : null
+            }
           </Route>
           <Route>
             <FullPage>

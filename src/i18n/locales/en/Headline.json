@@ -2,7 +2,6 @@
   "points": "{{ count }} point",
   "points_plural": "{{ count }} points",
   "by": "by",
-  "time": "{{ time | distance }}",
   "comments": "{{ count }} comment",
   "comments_plural": "{{ count }} comments"
 }

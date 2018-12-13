@@ -5,10 +5,27 @@ import {
   PaletteType,
   Theme,
 } from '@material-ui/core'
+import { indigo } from '@material-ui/core/colors'
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { ReactNode } from 'react'
 import { noop } from '../../util'
 import { WithStorage, withStorage } from '../StorageProvider/StorageProvider'
+
+declare module '@material-ui/core/styles/createPalette' {
+  interface PaletteOptions {
+    link: {
+      default: string
+      active: string
+    }
+  }
+
+  interface Palette {
+    link: {
+      default: string
+      active: string
+    }
+  }
+}
 
 interface ThemeProviderProps extends WithStorage<ThemeProviderState> {}
 
@@ -67,7 +84,19 @@ class ThemeProvider extends React.Component<
   @Memoize()
   private _createMuiTheme(type: PaletteType): Theme {
     return createMuiTheme({
-      palette: { type },
+      palette: {
+        type,
+        link:
+          type === 'light'
+            ? {
+                default: indigo.A700,
+                active: indigo[700],
+              }
+            : {
+                default: indigo.A100,
+                active: indigo[100],
+              },
+      },
       typography: {
         useNextVariants: true,
       },

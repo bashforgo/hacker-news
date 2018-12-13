@@ -15,6 +15,7 @@ import StoryHeadline from './StoryHeadline'
 
 interface HeadlineProps {
   id: ItemId
+  wrapped?: boolean
 }
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
@@ -25,6 +26,10 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 })
 
 class Headline extends Component<HeadlineProps & WithStyles> {
+  public static defaultProps: Partial<HeadlineProps> = {
+    wrapped: true,
+  }
+
   public render(): ReactNode {
     return <WithUpdates from={this._subscribe}>{this._renderItem}</WithUpdates>
   }
@@ -36,10 +41,14 @@ class Headline extends Component<HeadlineProps & WithStyles> {
 
   @Bind()
   private _renderItem(item?: Item): ReactNode {
-    return (
+    const content: ReactNode = item ? this._item(item) : this._empty()
+
+    return this.props.wrapped ? (
       <Card component="li" className={this.props.classes.card}>
-        {item ? this._item(item) : this._empty()}
+        {content}
       </Card>
+    ) : (
+      content
     )
   }
 

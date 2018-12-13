@@ -5,6 +5,8 @@ export interface BaseItem {
   by: UserId
   id: ItemId
   time: DateTime
+  dead?: true
+  deleted?: true
 }
 
 export interface Story extends BaseItem {

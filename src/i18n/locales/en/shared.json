@@ -1,4 +1,5 @@
 {
   "appName": "Hacker News",
-  "close": "close"
+  "close": "close",
+  "timeDistance": "{{ time | distance }}"
 }

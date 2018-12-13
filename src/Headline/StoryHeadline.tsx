@@ -6,10 +6,11 @@ import {
   WithStyles,
   withStyles,
 } from '@material-ui/core/styles'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 import { WithNamespaces, withNamespaces } from 'react-i18next'
 import { Poll, Story } from '../api'
 import Link from '../Link/Link'
+import Time from '../Time/Time'
 import { interleave } from '../util'
 
 export interface StoryHeadlineProps {
@@ -18,7 +19,11 @@ export interface StoryHeadlineProps {
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   link: {
-    color: theme.palette.primary.light,
+    color: theme.palette.link.default,
+    '&:focus, &:active, &:visited': {
+      color: theme.palette.link.active,
+      outline: 'none',
+    },
   },
   inline: {
     display: 'inline-block',
@@ -33,6 +38,23 @@ function StoryHeadline({
   const { title, score, by, descendants, id, time }: Story | Poll = item
   const external: boolean = item.type === 'story' && !!item.url
   const url: string = external ? (item as Story).url : `/item/${id}`
+  const linkTo: (
+    key: string,
+    href: string,
+    children: ReactNode,
+  ) => ReactNode = (
+    key: string,
+    href: string,
+    children: ReactNode,
+  ): ReactNode => (
+    <Link
+      variant="inherit"
+      color="inherit"
+      className={classes.inline}
+      {...{ key, href, children }}
+    />
+  )
+
   return (
     <>
       <Link
@@ -52,26 +74,14 @@ function StoryHeadline({
           [
             t('points', { count: score }),
             t('by'),
-            <Link
-              key="by"
-              href={`/user/${by}`}
-              variant="inherit"
-              color="inherit"
-              className={classes.inline}
-            >
-              {by}
-            </Link>,
-            t('time', { time }),
+            linkTo('by', `/user/${by}`, by),
+            linkTo('time', `/item/${id}`, <Time distance={time} key="time" />),
             '|',
-            <Link
-              key="comments"
-              href={`/item/${id}`}
-              variant="inherit"
-              color="inherit"
-              className={classes.inline}
-            >
-              {t('comments', { count: descendants })}
-            </Link>,
+            linkTo(
+              'comments',
+              `/item/${id}`,
+              t('comments', { count: descendants }),
+            ),
           ],
           ' ',
         )}
