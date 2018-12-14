@@ -1,3 +1,4 @@
+import { Bind } from 'lodash-decorators'
 import React, {
   Component,
   ComponentType,
@@ -9,11 +10,20 @@ import React, {
 import { noop } from '../../util'
 import { Storage, StorageBase } from './interfaces'
 import LocalStorage from './LocalStorage/LocalStorage'
+import SessionStorage from './SessionStorage/SessionStorage'
 
 export type Storage<T extends StorageBase> = Storage<T>
+export enum StorageType {
+  LOCAL,
+  SESSION,
+}
+export const { LOCAL, SESSION }: typeof StorageType = StorageType
 
 interface StorageContextType {
-  getStore<T = StorageBase>(namespace: string): Storage<T>
+  getStore<T extends StorageBase>(
+    namespace: string,
+    type?: StorageType,
+  ): Storage<T>
 }
 
 const StorageContext: Context<StorageContextType> = createContext({
@@ -22,15 +32,17 @@ const StorageContext: Context<StorageContextType> = createContext({
 
 export function StorageConsumer<T>({
   namespace,
+  type,
   children,
 }: {
   namespace: string
+  type?: StorageType
   children: (storage: Storage<T>) => ReactNode
 }): ReactElement<{}> {
   return (
     <StorageContext.Consumer>
       {(context: StorageContextType): ReactNode =>
-        children(context.getStore(namespace))
+        children(context.getStore(namespace, type))
       }
     </StorageContext.Consumer>
   )
@@ -43,6 +55,7 @@ type WithoutStorage<P> = Pick<P, Exclude<keyof P, 'storage'>>
 
 export function withStorage<T extends StorageBase>(
   namespace: string,
+  type?: StorageType,
 ): <P extends WithStorage<T>>(
   Cmp: ComponentType<P>,
 ) => ComponentType<WithoutStorage<P>> {
@@ -53,7 +66,7 @@ export function withStorage<T extends StorageBase>(
       return (
         <StorageContext.Consumer>
           {(context: StorageContextType): ReactElement<{}> => (
-            <Cmp storage={context.getStore(namespace)} {...props} />
+            <Cmp storage={context.getStore(namespace, type)} {...props} />
           )}
         </StorageContext.Consumer>
       )
@@ -66,12 +79,25 @@ class StorageProvider extends Component {
     return (
       <StorageContext.Provider
         value={{
-          getStore: LocalStorage.create,
+          getStore: this._getStore,
         }}
       >
         {this.props.children}
       </StorageContext.Provider>
     )
+  }
+
+  @Bind()
+  private _getStore<T extends StorageBase>(
+    namespace: string,
+    type: StorageType = LOCAL,
+  ): Storage<T> {
+    switch (type) {
+      case LOCAL:
+        return LocalStorage.create(namespace)
+      case SESSION:
+        return SessionStorage.create(namespace)
+    }
   }
 }
 

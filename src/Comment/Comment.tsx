@@ -19,6 +19,7 @@ import {
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
 import {
+  SESSION,
   withStorage,
   WithStorage,
 } from '../Root/StorageProvider/StorageProvider'
@@ -186,7 +187,7 @@ class Comment extends Component<
   }
 }
 
-const Self: ComponentType<CommentProps> = withStorage('comment')(
+const Self: ComponentType<CommentProps> = withStorage('comment', SESSION)(
   withStyles(styles)(Comment),
 )
 export default Self

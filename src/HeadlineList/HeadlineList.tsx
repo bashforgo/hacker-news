@@ -47,6 +47,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   pager: {
     display: 'flex',
     alignItems: 'center',
+    padding: `0 ${theme.spacing.unit}px`,
   },
 })
 
@@ -104,7 +105,6 @@ class HeadlineList extends Component<
         direction="row"
         justify="center"
         alignContent="center"
-        spacing={8}
       >
         <Grid item>
           <Button
