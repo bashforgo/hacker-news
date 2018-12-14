@@ -15,20 +15,11 @@ class LocalStorage<T extends StorageBase> extends NamespacedAbstractStorage<T> {
     },
   )
 
-  private _namespace: string
-  private constructor(namespace: string) {
+  protected get storage(): Storage {
     if (!window.localStorage) {
       throw new Error('no local storage')
     }
-    super()
-    this._namespace = namespace
-  }
 
-  protected get namespace(): string {
-    return this._namespace
-  }
-
-  protected get storage(): Storage {
     return localStorage
   }
 }

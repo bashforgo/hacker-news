@@ -4,7 +4,7 @@ abstract class NamespacedAbstractStorage<T extends StorageBase>
   implements StorageInterface<T> {
   private _cache: T
 
-  constructor() {
+  constructor(private _namespace: string) {
     this._cache = this._decode()
   }
 
@@ -25,15 +25,14 @@ abstract class NamespacedAbstractStorage<T extends StorageBase>
     this._encode()
   }
 
-  protected abstract get namespace(): string
   protected abstract get storage(): Storage
 
   private _decode(): T {
-    return JSON.parse(this.storage.getItem(this.namespace) || '{}')
+    return JSON.parse(this.storage.getItem(this._namespace) || '{}')
   }
 
   private _encode(): void {
-    this.storage.setItem(this.namespace, JSON.stringify(this._cache))
+    this.storage.setItem(this._namespace, JSON.stringify(this._cache))
   }
 }
 
