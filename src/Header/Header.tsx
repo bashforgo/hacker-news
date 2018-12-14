@@ -18,8 +18,8 @@ import { Hackernews } from 'mdi-material-ui'
 import React, { Component, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'
 import Breakpoint from '../Breakpoint/Breakpoint'
-import { Feed } from '../HeadlineList/HeadlineList'
 import Link from '../Link/Link'
+import FeedRoute, { feeds, MainFeed } from '../routes/FeedRoute/FeedRoute'
 import { interleave } from '../util'
 import WithToggle from '../WithToggle/WithToggle'
 import Settings from './Settings/Settings'
@@ -68,8 +68,6 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 })
 
 class Header extends Component<WithNamespaces & WithStyles> {
-  private static _feeds: Feed[] = ['top', 'new', 'best', 'ask', 'show', 'job']
-
   public render(): ReactNode {
     const { t, classes }: Header['props'] = this.props
 
@@ -79,7 +77,10 @@ class Header extends Component<WithNamespaces & WithStyles> {
           <Toolbar className={classes.toolbar}>
             <Breakpoint at="sm">
               <Breakpoint.Up>
-                <Link href="/top" className={classes.home}>
+                <Link
+                  href={FeedRoute.makeURL({ feed: 'top' })}
+                  className={classes.home}
+                >
                   <Hackernews />
                   <Typography variant="h6" color="inherit">
                     {t('shared:appName')}
@@ -87,10 +88,10 @@ class Header extends Component<WithNamespaces & WithStyles> {
                 </Link>
                 <ul className={classes.feedList}>
                   {interleave(
-                    Header._feeds.map((feed: Feed) => (
+                    feeds.map((feed: MainFeed) => (
                       <li className={classes.feedLink} key={feed}>
                         <Link
-                          href={`/${feed}`}
+                          href={FeedRoute.makeURL({ feed })}
                           variant="h6"
                           className={classes.feedLinkText}
                         >
@@ -118,10 +119,10 @@ class Header extends Component<WithNamespaces & WithStyles> {
                       </Button>
                       <Drawer anchor="left" open={open} onClose={toggle}>
                         <List className={classes.drawer}>
-                          {Header._feeds.map((feed: Feed) => (
+                          {feeds.map((feed: MainFeed) => (
                             <ListItem key={feed} button>
                               <Link
-                                href={`/${feed}`}
+                                href={FeedRoute.makeURL({ feed })}
                                 color="textPrimary"
                                 variant="h6"
                                 className={classes.feedLinkText}

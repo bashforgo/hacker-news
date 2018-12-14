@@ -23,6 +23,7 @@ import {
   withStorage,
   WithStorage,
 } from '../Root/StorageProvider/StorageProvider'
+import ItemRoute from '../routes/ItemRoute/ItemRoute'
 import Time from '../Time/Time'
 import WithToggle from '../WithToggle/WithToggle'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
@@ -129,7 +130,7 @@ class Comment extends Component<
                   ' ',
                   <Link
                     key="time"
-                    href={`/item/${this.props.id}`}
+                    href={ItemRoute.makeURL({ id })}
                     className={classes.inline}
                   >
                     <Time distance={time} />

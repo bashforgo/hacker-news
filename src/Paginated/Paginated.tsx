@@ -43,7 +43,7 @@ class Paginated<T = unknown> extends Component<
 
     return children(
       this.state.paginated,
-      Math.floor((data.length - 1) / pageSize),
+      Math.floor(((data.length || 1) - 1) / pageSize),
     )
   }
 }

@@ -23,13 +23,13 @@ import {
 } from '../api'
 import Headline from '../Headline/Headline'
 import Paginated from '../Paginated/Paginated'
+import FeedRoute, { MainFeed } from '../routes/FeedRoute/FeedRoute'
+import { clamp } from '../util'
 import WithUpdates from '../WithUpdates/WithUpdates'
-
-export type Feed = 'top' | 'new' | 'best' | 'ask' | 'show' | 'job'
 
 interface HeadlineListProps {
   page?: number
-  feed?: Feed
+  feed?: MainFeed
 }
 
 const PAGE_SIZE: number = 30
@@ -110,7 +110,10 @@ class HeadlineList extends Component<
           <Button
             disabled={this._getPage() <= 0}
             component={ButtonLinkTo(
-              `/${this._getFeed()}/${this._getPage() - 1}`,
+              FeedRoute.makeURL({
+                feed: this._getFeed(),
+                page: clamp(this._getPage() - 1, 0, numberOfPages),
+              }),
             )}
           >
             {t('previous')}
@@ -127,7 +130,10 @@ class HeadlineList extends Component<
           <Button
             disabled={this._getPage() >= numberOfPages}
             component={ButtonLinkTo(
-              `/${this._getFeed()}/${this._getPage() + 1}`,
+              FeedRoute.makeURL({
+                feed: this._getFeed(),
+                page: clamp(this._getPage() + 1, 0, numberOfPages),
+              }),
             )}
           >
             {t('next')}
@@ -141,12 +147,12 @@ class HeadlineList extends Component<
     return this.props.page || 0
   }
 
-  private _getFeed(): Feed {
+  private _getFeed(): MainFeed {
     return this.props.feed || 'top'
   }
 
   private _getFeedReader(): FeedReader {
-    const feed: Feed = this._getFeed()
+    const feed: MainFeed = this._getFeed()
 
     switch (feed) {
       case 'top':

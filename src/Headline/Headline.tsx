@@ -23,6 +23,7 @@ import {
 } from '../api'
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
+import ItemRoute from '../routes/ItemRoute/ItemRoute'
 import Time from '../Time/Time'
 import { interleave } from '../util/interleave'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
@@ -119,7 +120,11 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
         {this._caption([
           t('points', { count: score }),
           '|',
-          this._captionLink('parentPoll', `/item/${poll}`, t('poll')),
+          this._captionLink(
+            'parentPoll',
+            ItemRoute.makeURL({ id: poll }),
+            t('poll'),
+          ),
         ])}
       </>
     )
@@ -135,11 +140,15 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
           this._captionLink('by', `/user/${by}`, by),
           this._captionLink(
             'time',
-            `/item/${id}`,
+            ItemRoute.makeURL({ id }),
             <Time distance={time} key="time" />,
           ),
           '|',
-          this._captionLink('parent', `/item/${parent}`, t('parent')),
+          this._captionLink(
+            'parent',
+            ItemRoute.makeURL({ id: parent }),
+            t('parent'),
+          ),
         ])}
         {this._maybeText(comment, false)}
       </>
@@ -166,7 +175,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
     const { id, title }: typeof item = item
     return 'url' in item && item.url
       ? this._header(true, item.url, title)
-      : this._header(false, `/item/${id}`, title)
+      : this._header(false, ItemRoute.makeURL({ id }), title)
   }
 
   private _caption(content: ReactNode[]): ReactNode {
@@ -203,7 +212,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
       this._captionLink('by', `/user/${by}`, by),
       this._captionLink(
         'time',
-        `/item/${id}`,
+        ItemRoute.makeURL({ id }),
         <Time distance={time} key="time" />,
       ),
       ...('descendants' in item
@@ -211,7 +220,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
             '|',
             this._captionLink(
               'comments',
-              `/item/${id}`,
+              ItemRoute.makeURL({ id }),
               t('comments', { count: item.descendants }),
             ),
           ]
