@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core'
+import { Button, Grid, Typography } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import {
   StyleRules,
@@ -18,12 +18,19 @@ import {
 } from '../api'
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
+import {
+  withStorage,
+  WithStorage,
+} from '../Root/StorageProvider/StorageProvider'
 import Time from '../Time/Time'
+import WithToggle from '../WithToggle/WithToggle'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 interface CommentProps {
   id: ItemId
 }
+
+type CommentStorage = Record<ItemId, true>
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   root: {
@@ -71,9 +78,23 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
     flex: `1 0 0`,
     maxWidth: `calc(100% - ${theme.spacing.unit * (1.5 + 0.25)}px)`,
   },
+  expandButton: {
+    ...theme.typography.caption,
+    padding: 0,
+    minWidth: 0,
+    minHeight: 0,
+    marginLeft: theme.spacing.unit,
+    color: theme.palette.text.secondary,
+    '&:hover, &:focus, &:active': {
+      fontWeight: theme.typography.fontWeightMedium,
+      textDecoration: 'underline',
+    },
+  },
 })
 
-class Comment extends Component<CommentProps & WithStyles> {
+class Comment extends Component<
+  CommentProps & WithStyles & WithStorage<CommentStorage>
+> {
   public render(): ReactNode {
     return (
       <WithUpdates from={this._subscribe(this.props.id)}>
@@ -87,35 +108,56 @@ class Comment extends Component<CommentProps & WithStyles> {
     if (!comment) return null
     const { by, text, time, dead, deleted }: CommentType = comment
     if (dead || deleted) return null
-    const { classes }: this['props'] = this.props
+    const { classes, storage, id }: this['props'] = this.props
 
     return (
-      <Grid container className={classes.root}>
-        <Grid item className={classes.barContainer}>
-          <button className={classes.bar} />
-        </Grid>
-        <Grid item className={classes.content}>
-          <Typography
-            variant="caption"
-            color="textSecondary"
-            className={classes.inline}
-          >
-            {[
-              by,
-              ' ',
-              <Link
-                key="time"
-                href={`/item/${this.props.id}`}
+      <WithToggle initial={!!storage.get(id)} onChange={this._onToggle}>
+        {(collapsed: boolean, toggle: () => void): ReactNode => (
+          <Grid container className={classes.root}>
+            <Grid item className={classes.barContainer}>
+              <button className={classes.bar} onClick={toggle} />
+            </Grid>
+            <Grid item className={classes.content}>
+              <Typography
+                variant="caption"
+                color="textSecondary"
                 className={classes.inline}
               >
-                <Time distance={time} />
-              </Link>,
-            ]}
-          </Typography>
-          <ContentHtml>{text}</ContentHtml>
-          {this._renderKids(comment)}
-        </Grid>
-      </Grid>
+                {[
+                  by,
+                  ' ',
+                  <Link
+                    key="time"
+                    href={`/item/${this.props.id}`}
+                    className={classes.inline}
+                  >
+                    <Time distance={time} />
+                  </Link>,
+                  ...(collapsed
+                    ? [
+                        ' ',
+                        <Button
+                          key="expand"
+                          className={classes.expandButton}
+                          onClick={toggle}
+                          disableRipple
+                        >
+                          [+]
+                        </Button>,
+                      ]
+                    : []),
+                ]}
+              </Typography>
+              {collapsed ? null : (
+                <>
+                  <ContentHtml>{text}</ContentHtml>
+                  {this._renderKids(comment)}
+                </>
+              )}
+            </Grid>
+          </Grid>
+        )}
+      </WithToggle>
     )
   }
 
@@ -126,6 +168,17 @@ class Comment extends Component<CommentProps & WithStyles> {
   }
 
   @Bind()
+  private _onToggle(collapsed: boolean): void {
+    const { storage, id }: this['props'] = this.props
+
+    if (collapsed) {
+      storage.set(id, true)
+    } else {
+      storage.delete(id)
+    }
+  }
+
+  @Bind()
   @Memoize()
   private _subscribe(id: ItemId): WithUpdatesFrom<CommentType> {
     return (subscriber: Subscriber<CommentType>): Unsubscriber =>
@@ -133,5 +186,7 @@ class Comment extends Component<CommentProps & WithStyles> {
   }
 }
 
-const Self: ComponentType<CommentProps> = withStyles(styles)(Comment)
+const Self: ComponentType<CommentProps> = withStorage('comment')(
+  withStyles(styles)(Comment),
+)
 export default Self

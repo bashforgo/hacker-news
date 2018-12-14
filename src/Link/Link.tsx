@@ -26,8 +26,9 @@ interface LinkProps extends TypographyProps {
 const styles: StyleRulesCallback = (_theme: Theme): StyleRules => ({
   link: {
     textDecoration: 'none',
-    '&:hover': {
+    '&:hover, &:focus, &:active': {
       textDecoration: 'underline',
+      outline: 'none',
     },
   },
 })

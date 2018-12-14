@@ -7,11 +7,7 @@ import ErrorPage from '../../ErrorPage/ErrorPage'
 import { setup } from '../../i18n'
 import LoadingPage from '../../LoadingPage/LoadingPage'
 import { noop } from '../../util'
-import {
-  Storage,
-  withStorage,
-  WithStorage,
-} from '../StorageProvider/StorageProvider'
+import { withStorage, WithStorage } from '../StorageProvider/StorageProvider'
 
 interface LanguageProviderProps extends WithStorage<LanguageProviderState> {}
 interface LanguageProviderState {
@@ -39,7 +35,7 @@ class LanguageProvider extends React.Component<
   constructor(props: LanguageProviderProps) {
     super(props)
     this.state = {
-      language: props.storage.get('language') || DEFAULT_LANGUAGE,
+      language: props.storage.get('language', DEFAULT_LANGUAGE),
     }
   }
 

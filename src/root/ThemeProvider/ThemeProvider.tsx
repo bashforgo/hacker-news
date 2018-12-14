@@ -53,7 +53,7 @@ class ThemeProvider extends React.Component<
   constructor(props: ThemeProviderProps) {
     super(props)
     this.state = {
-      theme: props.storage.get('theme') || DEFAULT_THEME,
+      theme: props.storage.get('theme', DEFAULT_THEME),
     }
   }
 

@@ -3,6 +3,7 @@ import { Component, ReactNode } from 'react'
 
 interface ToggleProps {
   initial: boolean
+  onChange?(state: boolean): void
   children(state: boolean, toggle: () => void): ReactNode
 }
 
@@ -22,7 +23,12 @@ class Toggle extends Component<ToggleProps, ToggleState> {
 
   @Bind()
   private _toggle(): void {
-    this.setState(({ value }: ToggleState) => ({ value: !value }))
+    this.setState(
+      ({ value }: ToggleState) => ({ value: !value }),
+      () => {
+        if (this.props.onChange) this.props.onChange(this.state.value)
+      },
+    )
   }
 }
 

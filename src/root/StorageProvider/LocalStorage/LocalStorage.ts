@@ -1,38 +1,49 @@
+import mem from 'mem'
 import { Storage, StorageFactory } from '../interfaces'
 
 const LocalStorage: StorageFactory = {
-  create<T extends Record<string, unknown>>(namespace: string): Storage<T> {
-    class NamespacedLocalStorage implements Storage<T> {
-      private _cache: T
+  create: mem<StorageFactory['create']>(
+    <T extends Record<string, unknown>>(namespace: string): Storage<T> => {
+      class NamespacedLocalStorage implements Storage<T> {
+        private _cache: T
 
-      constructor() {
-        if (!window.localStorage) {
-          throw new Error('no local storage')
+        constructor() {
+          if (!window.localStorage) {
+            throw new Error('no local storage')
+          }
+
+          this._cache = this._decode()
         }
 
-        this._cache = this._decode()
+        public get<Key extends keyof T, Otherwise = undefined>(
+          key: Key,
+          otherwise?: Otherwise,
+        ): T[Key] | Otherwise {
+          return this._cache[key] || otherwise
+        }
+
+        public set<Key extends keyof T>(key: Key, value: T[Key]): void {
+          this._cache[key] = value
+          this._encode()
+        }
+
+        public delete<Key extends keyof T>(key: Key): void {
+          delete this._cache[key]
+          this._encode()
+        }
+
+        private _decode(): T {
+          return JSON.parse(localStorage.getItem(namespace) || '{}')
+        }
+
+        private _encode(): void {
+          localStorage.setItem(namespace, JSON.stringify(this._cache))
+        }
       }
 
-      public get<Key extends keyof T>(key: Key): T[Key] | undefined {
-        return this._cache[key]
-      }
-
-      public set<Key extends keyof T>(key: Key, value: T[Key]): void {
-        this._cache[key] = value
-        this._encode()
-      }
-
-      private _decode(): T {
-        return JSON.parse(localStorage.getItem(namespace) || '{}')
-      }
-
-      private _encode(): void {
-        localStorage.setItem(namespace, JSON.stringify(this._cache))
-      }
-    }
-
-    return new NamespacedLocalStorage()
-  },
+      return new NamespacedLocalStorage()
+    },
+  ),
 }
 
 export default LocalStorage
