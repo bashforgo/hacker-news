@@ -1,4 +1,4 @@
-import { formatDistance, Locale } from 'date-fns'
+import { format as formatDate, formatDistance, Locale } from 'date-fns'
 import i18next, { i18n } from 'i18next'
 import { isDev } from '../util'
 
@@ -49,6 +49,14 @@ export function setup(initLanguage: string): Promise<i18n> {
                     }
                     return formatDistance(new Date(1000 * value), new Date(), {
                       addSuffix: true,
+                      locale: currentLocale,
+                    })
+                  }
+                  case 'date': {
+                    if (typeof value !== 'number') {
+                      throw new Error('invalid distance value')
+                    }
+                    return formatDate(new Date(1000 * value), 'PP', {
                       locale: currentLocale,
                     })
                   }

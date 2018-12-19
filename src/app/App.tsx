@@ -6,6 +6,7 @@ import FeedRoute from '../routes/FeedRoute/FeedRoute'
 import ItemRoute from '../routes/ItemRoute/ItemRoute'
 import NotFoundRoute from '../routes/NotFoundRoute/NotFoundRoute'
 import RootRoute from '../routes/RootRoute/RootRoute'
+import UserRoute from '../routes/UserRoute/UserRoute'
 
 class App extends Component {
   public render(): JSX.Element {
@@ -17,6 +18,7 @@ class App extends Component {
             {RootRoute.use()}
             {FeedRoute.use()}
             {ItemRoute.use()}
+            {UserRoute.use()}
             {NotFoundRoute.use()}
           </Switch>
         </main>

@@ -37,7 +37,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   list: {
     padding: 0,
     margin: 0,
-    maxWidth: theme.spacing.unit * 120,
+    maxWidth: theme.mixins.appMaxWidth,
     flexGrow: 1,
   },
   card: {

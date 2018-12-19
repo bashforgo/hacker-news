@@ -27,7 +27,7 @@ import Settings from './Settings/Settings'
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   toolbar: {
-    maxWidth: theme.spacing.unit * 150,
+    maxWidth: theme.mixins.toolbarMaxWidth,
     alignSelf: 'center',
     width: '100%',
   },

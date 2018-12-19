@@ -19,7 +19,7 @@ export interface ThreadProps {
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   container: {
-    maxWidth: theme.spacing.unit * 120,
+    maxWidth: theme.mixins.appMaxWidth,
     padding: theme.spacing.unit,
   },
   spacer: {

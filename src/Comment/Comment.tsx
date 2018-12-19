@@ -25,6 +25,7 @@ import {
   WithStorage,
 } from '../Root/StorageProvider/StorageProvider'
 import ItemRoute from '../routes/ItemRoute/ItemRoute'
+import UserRoute from '../routes/UserRoute/UserRoute'
 import Time from '../Time/Time'
 import WithToggle from '../WithToggle/WithToggle'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
@@ -140,7 +141,13 @@ class Comment extends Component<
                 component="aside"
               >
                 {[
-                  by,
+                  <Link
+                    key="user"
+                    href={UserRoute.makeURL({ id: by })}
+                    className={classes.inline}
+                  >
+                    {by}
+                  </Link>,
                   ' ',
                   <Link
                     key="time"

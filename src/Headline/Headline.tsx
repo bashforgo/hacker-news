@@ -24,6 +24,7 @@ import {
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
 import ItemRoute from '../routes/ItemRoute/ItemRoute'
+import UserRoute from '../routes/UserRoute/UserRoute'
 import Time from '../Time/Time'
 import { interleave } from '../util/interleave'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
@@ -137,7 +138,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
     return (
       <>
         {this._caption([
-          this._captionLink('by', `/user/${by}`, by),
+          this._captionLink('by', UserRoute.makeURL({ id: by }), by),
           this._captionLink(
             'time',
             ItemRoute.makeURL({ id }),
@@ -210,7 +211,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
     return this._caption([
       t('points', { count: score }),
       t('by'),
-      this._captionLink('by', `/user/${by}`, by),
+      this._captionLink('by', UserRoute.makeURL({ id: by }), by),
       this._captionLink(
         'time',
         ItemRoute.makeURL({ id }),

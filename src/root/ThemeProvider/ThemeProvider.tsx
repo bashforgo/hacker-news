@@ -11,6 +11,13 @@ import React, { ReactNode } from 'react'
 import { noop } from '../../util'
 import { WithStorage, withStorage } from '../StorageProvider/StorageProvider'
 
+declare module '@material-ui/core/styles/createMixins' {
+  interface Mixins {
+    appMaxWidth: number
+    toolbarMaxWidth: number
+  }
+}
+
 declare module '@material-ui/core/styles/createPalette' {
   interface PaletteOptions {
     link: {
@@ -84,6 +91,10 @@ class ThemeProvider extends React.Component<
   @Memoize()
   private _createMuiTheme(type: PaletteType): Theme {
     return createMuiTheme({
+      mixins: {
+        appMaxWidth: 8 * 120,
+        toolbarMaxWidth: 8 * 150,
+      },
       palette: {
         type,
         link:
