@@ -71,7 +71,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
 
   @Bind()
   private _renderItem(item?: Item): ReactNode {
-    return item ? this._item(item) : this._empty()
+    return <section>{item ? this._item(item) : this._empty()}</section>
   }
 
   private _empty(): ReactNode {
@@ -186,6 +186,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
         variant="caption"
         color="textSecondary"
         className={classes.inline}
+        component="aside"
       >
         {interleave(content, ' ')}
       </Typography>
@@ -250,10 +251,6 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
         )}
       </section>
     ) : null
-  }
-
-  private ___(): ReactNode {
-    return null
   }
 }
 

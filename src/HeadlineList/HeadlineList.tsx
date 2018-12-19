@@ -80,18 +80,20 @@ class HeadlineList extends Component<
     const { classes, t }: this['props'] = this.props
 
     return (
-      <Grid container justify="center">
-        <Grid item component="ul" className={classes.list}>
-          {items.map(
-            (id: ItemId): ReactNode => (
-              <Card component="li" className={classes.card} key={id}>
-                <Headline id={id} />
-              </Card>
-            ),
-          )}
-          {this._renderPager(numberOfPages)}
+      <article>
+        <Grid container justify="center">
+          <Grid item component="ul" className={classes.list}>
+            {items.map(
+              (id: ItemId): ReactNode => (
+                <Card component="li" className={classes.card} key={id}>
+                  <Headline id={id} />
+                </Card>
+              ),
+            )}
+            {this._renderPager(numberOfPages)}
+          </Grid>
         </Grid>
-      </Grid>
+      </article>
     )
   }
 

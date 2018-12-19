@@ -89,6 +89,7 @@ class Settings extends Component<WithNamespaces & WithStyles> {
               onClick={toggle}
               color="inherit"
               aria-label={t('settings')}
+              aria-haspopup
             >
               <SettingsIcon />
             </IconButton>

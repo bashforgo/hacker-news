@@ -2,6 +2,7 @@ import {
   AppBar,
   Button,
   Drawer,
+  Grid,
   List,
   ListItem,
   Toolbar,
@@ -77,31 +78,33 @@ class Header extends Component<WithNamespaces & WithStyles> {
           <Toolbar className={classes.toolbar}>
             <Breakpoint at="sm">
               <Breakpoint.Up>
-                <Link
-                  href={FeedRoute.makeURL({ feed: 'top' })}
-                  className={classes.home}
-                >
-                  <Hackernews />
-                  <Typography variant="h6" color="inherit">
-                    {t('shared:appName')}
-                  </Typography>
-                </Link>
-                <ul className={classes.feedList}>
-                  {interleave(
-                    feeds.map((feed: MainFeed) => (
-                      <li className={classes.feedLink} key={feed}>
-                        <Link
-                          href={FeedRoute.makeURL({ feed })}
-                          variant="h6"
-                          className={classes.feedLinkText}
-                        >
-                          {t(feed)}
-                        </Link>
-                      </li>
-                    )),
-                    ' | ',
-                  )}
-                </ul>
+                <Grid container component="nav">
+                  <Link
+                    href={FeedRoute.makeURL({ feed: 'top' })}
+                    className={classes.home}
+                  >
+                    <Hackernews />
+                    <Typography variant="h6" color="inherit">
+                      {t('shared:appName')}
+                    </Typography>
+                  </Link>
+                  <ul className={classes.feedList} aria-label={t('feeds')}>
+                    {interleave(
+                      feeds.map((feed: MainFeed) => (
+                        <li className={classes.feedLink} key={feed}>
+                          <Link
+                            href={FeedRoute.makeURL({ feed })}
+                            variant="h6"
+                            className={classes.feedLinkText}
+                          >
+                            {t(feed)}
+                          </Link>
+                        </li>
+                      )),
+                      ' | ',
+                    )}
+                  </ul>
+                </Grid>
               </Breakpoint.Up>
               <Breakpoint.Down>
                 <WithToggle initial={false}>
@@ -118,21 +121,26 @@ class Header extends Component<WithNamespaces & WithStyles> {
                         </Typography>
                       </Button>
                       <Drawer anchor="left" open={open} onClose={toggle}>
-                        <List className={classes.drawer}>
-                          {feeds.map((feed: MainFeed) => (
-                            <ListItem key={feed} button>
-                              <Link
-                                href={FeedRoute.makeURL({ feed })}
-                                color="textPrimary"
-                                variant="h6"
-                                className={classes.feedLinkText}
-                                onClick={toggle}
-                              >
-                                {t(feed)}
-                              </Link>
-                            </ListItem>
-                          ))}
-                        </List>
+                        <nav>
+                          <List
+                            className={classes.drawer}
+                            aria-label={t('feeds')}
+                          >
+                            {feeds.map((feed: MainFeed) => (
+                              <ListItem key={feed} button component="li">
+                                <Link
+                                  href={FeedRoute.makeURL({ feed })}
+                                  color="textPrimary"
+                                  variant="h6"
+                                  className={classes.feedLinkText}
+                                  onClick={toggle}
+                                >
+                                  {t(feed)}
+                                </Link>
+                              </ListItem>
+                            ))}
+                          </List>
+                        </nav>
                       </Drawer>
                     </>
                   )}

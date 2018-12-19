@@ -60,7 +60,7 @@ class ContentHtml extends Component<ContentHtmlProps & WithStyles> {
     const { classes, className }: this['props'] = this.props
 
     return (
-      <div
+      <p
         className={classnames(classes.content, className)}
         dangerouslySetInnerHTML={{ __html: this.props.children }}
       />

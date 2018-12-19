@@ -12,12 +12,14 @@ class App extends Component {
     return (
       <Root>
         <Header />
-        <Switch>
-          {RootRoute.use()}
-          {FeedRoute.use()}
-          {ItemRoute.use()}
-          {NotFoundRoute.use()}
-        </Switch>
+        <main>
+          <Switch>
+            {RootRoute.use()}
+            {FeedRoute.use()}
+            {ItemRoute.use()}
+            {NotFoundRoute.use()}
+          </Switch>
+        </main>
       </Root>
     )
   }

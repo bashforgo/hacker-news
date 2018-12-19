@@ -6,5 +6,6 @@
   "show": "show",
   "job": "jobs",
   "poll": "poll",
-  "parent": "parent"
+  "parent": "parent",
+  "feeds": "feed links"
 }

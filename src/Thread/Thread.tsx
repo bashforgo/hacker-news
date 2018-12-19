@@ -33,7 +33,13 @@ class Thread extends Component<ThreadProps & WithStyles> {
 
     return (
       <Grid container justify="center">
-        <Grid item container direction="column" className={classes.container}>
+        <Grid
+          item
+          container
+          direction="column"
+          className={classes.container}
+          component="article"
+        >
           <WithUpdates from={this._subscribe(id)}>
             {this._renderItem}
           </WithUpdates>

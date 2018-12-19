@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core/styles'
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { Component, ComponentType, ReactNode } from 'react'
+import { WithNamespaces, withNamespaces } from 'react-i18next'
 import {
   Comment as CommentType,
   getItem,
@@ -95,7 +96,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 })
 
 class Comment extends Component<
-  CommentProps & WithStyles & WithStorage<CommentStorage>
+  CommentProps & WithStyles & WithStorage<CommentStorage> & WithNamespaces
 > {
   public render(): ReactNode {
     return (
@@ -110,20 +111,33 @@ class Comment extends Component<
     if (!comment) return null
     const { by, text, time, dead, deleted }: CommentType = comment
     if (dead || deleted) return null
-    const { classes, storage, id }: this['props'] = this.props
+    const { classes, storage, id, t }: this['props'] = this.props
+    const nodeId: string = `comment-${id}`
 
     return (
       <WithToggle initial={!!storage.get(id)} onChange={this._onToggle}>
         {(collapsed: boolean, toggle: () => void): ReactNode => (
-          <Grid container className={classes.root}>
+          <Grid container className={classes.root} component="section">
             <Grid item className={classes.barContainer}>
-              <button className={classes.bar} onClick={toggle} />
+              <button
+                className={classes.bar}
+                onClick={toggle}
+                aria-label={t('collapse')}
+                aria-controls={nodeId}
+                aria-expanded={!collapsed}
+              />
             </Grid>
-            <Grid item className={classes.content}>
+            <Grid
+              item
+              className={classes.content}
+              id={nodeId}
+              aria-hidden={collapsed}
+            >
               <Typography
                 variant="caption"
                 color="textSecondary"
                 className={classes.inline}
+                component="aside"
               >
                 {[
                   by,
@@ -142,6 +156,7 @@ class Comment extends Component<
                           key="expand"
                           className={classes.expandButton}
                           onClick={toggle}
+                          aria-label={t('expand')}
                           disableRipple
                         >
                           [+]
@@ -189,6 +204,6 @@ class Comment extends Component<
 }
 
 const Self: ComponentType<CommentProps> = withStorage('comment', SESSION)(
-  withStyles(styles)(Comment),
+  withNamespaces('Comment')(withStyles(styles)(Comment)),
 )
 export default Self
