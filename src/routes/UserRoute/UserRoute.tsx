@@ -3,13 +3,13 @@ import { UserId } from '../../api'
 import User from '../../User/User'
 import SimpleRouteConfig, { AsString } from '../util/SimpleRouteConfig'
 
-interface ItemRouteParams {
+interface UserRouteParams {
   id: UserId
 }
 
-class UserRoute extends SimpleRouteConfig<ItemRouteParams> {
+class UserRoute extends SimpleRouteConfig<UserRouteParams> {
   protected URL: string = '/user/:id'
-  protected translateParams({ id }: AsString<ItemRouteParams>): ReactNode {
+  protected translateParams({ id }: AsString<UserRouteParams>): ReactNode {
     return <User id={id} />
   }
 }

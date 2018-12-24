@@ -34,7 +34,10 @@ function whenExists<T>(cb: Subscriber<T>): (snap: Snapshot<T> | null) => void {
   }
 }
 
-function withUnsubscriber<T>(path: string, cb: Subscriber<T>): Unsubscriber {
+export function withUnsubscriber<T>(
+  path: string,
+  cb: Subscriber<T>,
+): Unsubscriber {
   const ref: Reference = api.child(path)
   const off: ReturnType<Reference['off']> = ref.on('value', whenExists(cb))
   return (): void => {

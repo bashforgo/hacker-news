@@ -1,5 +1,7 @@
 {
   "usernameCaption": "User:",
   "createdCaption": "Member since:",
-  "aboutCaption": "About:"
+  "aboutCaption": "About:",
+  "submissions": "Submissions",
+  "comments": "Comments"
 }

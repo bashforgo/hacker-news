@@ -30,7 +30,8 @@ import { interleave } from '../util/interleave'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 interface HeadlineProps {
-  id: ItemId
+  id?: ItemId
+  item?: Item
   expanded?: true
 }
 
@@ -56,11 +57,19 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
 type Core = Story | Job | Poll
 class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
   public render(): ReactNode {
-    return (
-      <WithUpdates from={this._subscribe(this.props.id)}>
-        {this._renderItem}
-      </WithUpdates>
-    )
+    const { item, id }: this['props'] = this.props
+
+    if (id) {
+      return (
+        <WithUpdates from={this._subscribe(id)}>{this._renderItem}</WithUpdates>
+      )
+    }
+
+    if (item) {
+      return this._renderItem(item)
+    }
+
+    throw new Error('either id or item should be provided')
   }
 
   @Bind()
@@ -132,8 +141,9 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
   }
 
   private _comment(comment: Comment): ReactNode {
+    const { by, id, time, parent, dead, deleted }: Comment = comment
+    if (dead || deleted) return null
     const { t }: this['props'] = this.props
-    const { by, id, time, parent }: Comment = comment
 
     return (
       <>

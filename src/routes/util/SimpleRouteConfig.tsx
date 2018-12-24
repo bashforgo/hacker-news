@@ -20,7 +20,7 @@ abstract class SimpleRouteConfig<
   private _translateParams({
     match,
   }: RouteComponentProps<AsString<Params>>): ReactNode {
-    return this.translateParams(match.params)
+    return match ? this.translateParams(match.params) : null
   }
 }
 

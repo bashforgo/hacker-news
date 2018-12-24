@@ -37,7 +37,7 @@
         "private-method-regex": "^_[\\w\\d]+$",
         "protected-method-regex": "^[a-z][\\w\\d]+$",
         "static-method-regex": "^[a-zA-Z_\\d]+$",
-        "function-regex": "^[a-zA-Z][\\w\\d]+$"
+        "function-regex": "^[a-zA-Z][\\w\\d]+\\$?$"
       }
     ],
     "variable-name": [
