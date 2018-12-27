@@ -8,7 +8,7 @@ class Root extends Component {
   public render(): ReactNode {
     return (
       <StorageProvider>
-        <HashRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter>
           <ThemeProvider>
             <LanguageProvider>{this.props.children}</LanguageProvider>
           </ThemeProvider>
