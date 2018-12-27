@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{3785:function(e){e.exports={more:"more",empty:"Nothing here.",shrug:"\xaf\\_(\u30c4)_/\xaf",shrugLabel:"shrug"}}}]);
+//# sourceMappingURL=8.307f7638.chunk.js.map
