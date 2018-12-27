@@ -1,6 +1,5 @@
 import { format as formatDate, formatDistance, Locale } from 'date-fns'
 import i18next, { i18n } from 'i18next'
-import { isDev } from '../util'
 
 export function setup(initLanguage: string): Promise<i18n> {
   let currentLocale: Locale | undefined
@@ -17,16 +16,7 @@ export function setup(initLanguage: string): Promise<i18n> {
           ): void {
             import(`./locales/${language}/${namespace}.json`)
               .then((result: object) => callback(null, result))
-              .catch((error: Error) => {
-                if (isDev()) {
-                  // tslint:disable-next-line no-console
-                  console.warn(
-                    'translation not found',
-                    language,
-                    namespace,
-                    error,
-                  )
-                }
+              .catch(() => {
                 callback(null, {})
               })
           },
@@ -85,7 +75,7 @@ export function setup(initLanguage: string): Promise<i18n> {
               },
             )
             .catch((error: Error) => {
-              if (isDev()) {
+              if (process.env.NODE_ENV === 'development') {
                 // tslint:disable-next-line no-console
                 console.warn('locale not found', language, error)
               }

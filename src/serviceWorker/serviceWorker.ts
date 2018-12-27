@@ -1,5 +1,3 @@
-import { isProd } from '../util'
-
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -30,7 +28,7 @@ interface Config {
 }
 
 export function register(config?: Config): void {
-  if (isProd() && 'serviceWorker' in navigator) {
+  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl: URL = new URL(
       (process as { env: { [key: string]: string } }).env.PUBLIC_URL,
