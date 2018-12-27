@@ -19,6 +19,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
     margin: 0,
     width: '100%',
     overflow: 'auto',
+    wordBreak: 'break-word',
     '& *': {
       margin: 0,
     },
@@ -27,6 +28,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
       marginTop: theme.spacing.unit / 2,
       maxWidth: '100%',
       overflow: 'auto',
+      wordBreak: 'break-word',
     },
     '& pre, & code': {
       ...theme.typography.body2,
