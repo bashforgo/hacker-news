@@ -1,11 +1,11 @@
 import { Memoize } from 'lodash-decorators'
 import { compile } from 'path-to-regexp'
 import { ReactNode } from 'react'
+import { AnyRecord } from '../../types'
 import RouteConfig from './RouteConfig'
 
-abstract class AbstractRouteConfig<
-  Params extends Record<string | number, unknown> = {}
-> implements RouteConfig<Params> {
+abstract class AbstractRouteConfig<Params extends AnyRecord = {}>
+  implements RouteConfig<Params> {
   protected abstract URL: string
 
   public abstract use(): ReactNode

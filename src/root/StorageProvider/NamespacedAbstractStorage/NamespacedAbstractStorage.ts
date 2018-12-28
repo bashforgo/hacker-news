@@ -1,6 +1,7 @@
-import { Storage as StorageInterface, StorageBase } from '../interfaces'
+import { AnyRecord } from '../../../types'
+import { Storage as StorageInterface } from '../interfaces'
 
-abstract class NamespacedAbstractStorage<T extends StorageBase>
+abstract class NamespacedAbstractStorage<T extends AnyRecord>
   implements StorageInterface<T> {
   private _cache: T
 
@@ -8,11 +9,12 @@ abstract class NamespacedAbstractStorage<T extends StorageBase>
     this._cache = this._decode()
   }
 
-  public get<Key extends keyof T, Otherwise = undefined>(
+  public get<Key extends keyof T>(key: Key): T[Key] | undefined
+  public get<Key extends keyof T, Otherwise>(
     key: Key,
     otherwise?: Otherwise,
   ): T[Key] | Otherwise {
-    return this._cache[key] || otherwise
+    return (this._cache[key] || otherwise) as T[Key] | Otherwise
   }
 
   public set<Key extends keyof T>(key: Key, value: T[Key]): void {

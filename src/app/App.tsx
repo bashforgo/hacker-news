@@ -8,6 +8,8 @@ import NotFoundRoute from '../routes/NotFoundRoute/NotFoundRoute'
 import RootRoute from '../routes/RootRoute/RootRoute'
 import UserRoute from '../routes/UserRoute/UserRoute'
 
+import '../Headline/Headline'
+
 class App extends Component {
   public render(): JSX.Element {
     return (

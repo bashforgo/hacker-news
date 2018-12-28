@@ -1,8 +1,11 @@
 import { Typography } from '@material-ui/core'
-import React, { ReactNode } from 'react'
+import React, { lazy, ReactNode } from 'react'
 import { Route } from 'react-router-dom'
-import FullPage from '../../FullPage/FullPage'
 import RouteConfig from '../util/RouteConfig'
+import withSuspense from '../util/withSuspense'
+
+// tslint:disable:typedef
+const FullPage = lazy(() => import('../../FullPage/FullPage'))
 
 class NotFoundRoute implements RouteConfig {
   public makeURL(): never {
@@ -10,12 +13,12 @@ class NotFoundRoute implements RouteConfig {
   }
 
   public use(): ReactNode {
-    return (
+    return withSuspense(
       <Route>
         <FullPage>
           <Typography variant="h2">404</Typography>
         </FullPage>
-      </Route>
+      </Route>,
     )
   }
 }

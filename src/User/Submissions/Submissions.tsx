@@ -4,7 +4,7 @@ import React, { Component, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Subscription } from 'rxjs'
-import { filterFeed$, getUserSubmissions$ } from '../../api'
+import { filterFeed$, getUserSubmissions$ } from '../../api/rx'
 import { Item, UserId } from '../../api/types'
 import Headline from '../../Headline/Headline'
 import SubmissionsRoute, {

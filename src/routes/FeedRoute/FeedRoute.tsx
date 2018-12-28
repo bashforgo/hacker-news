@@ -1,6 +1,9 @@
-import React, { ReactNode } from 'react'
-import HeadlineList from '../../HeadlineList/HeadlineList'
+import React, { lazy, ReactNode, Suspense } from 'react'
 import SimpleRouteConfig, { AsString } from '../util/SimpleRouteConfig'
+import withSuspense from '../util/withSuspense'
+
+// tslint:disable-next-line:typedef
+const HeadlineList = lazy(() => import('../../HeadlineList/HeadlineList'))
 
 export type MainFeed = 'top' | 'new' | 'best' | 'ask' | 'show' | 'job'
 export const feeds: MainFeed[] = ['top', 'new', 'best', 'ask', 'show', 'job']
@@ -16,7 +19,7 @@ class FeedRoute extends SimpleRouteConfig<FeedRouteParams> {
     feed,
     page,
   }: AsString<FeedRouteParams>): ReactNode {
-    return <HeadlineList feed={feed} page={Number(page || '0')} />
+    return withSuspense(<HeadlineList feed={feed} page={Number(page || '0')} />)
   }
 }
 

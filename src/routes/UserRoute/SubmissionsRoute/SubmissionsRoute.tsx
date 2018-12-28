@@ -1,7 +1,10 @@
-import React, { ReactNode } from 'react'
+import React, { lazy, ReactNode } from 'react'
 import { UserId } from '../../../api/types'
-import Submissions from '../../../User/Submissions/Submissions'
 import SimpleRouteConfig, { AsString } from '../../util/SimpleRouteConfig'
+import withSuspense from '../../util/withSuspense'
+
+// tslint:disable-next-line:typedef
+const Submissions = lazy(() => import('../../../User/Submissions/Submissions'))
 
 export type Filter = 'submissions' | 'comments'
 const filters: Filter[] = ['submissions', 'comments']
@@ -21,11 +24,11 @@ class SubmissionsRoute extends SimpleRouteConfig<SubmissionsRouteParams> {
     filter,
     amount,
   }: AsString<SubmissionsRouteParams>): ReactNode {
-    return (
+    return withSuspense(
       <Submissions
         amount={amount ? Number(amount) : undefined}
         {...{ id, filter }}
-      />
+      />,
     )
   }
 }

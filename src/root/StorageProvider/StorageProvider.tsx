@@ -7,12 +7,13 @@ import React, {
   ReactElement,
   ReactNode,
 } from 'react'
+import { AnyRecord } from '../../types'
 import { noop } from '../../util'
-import { Storage, StorageBase } from './interfaces'
+import { Storage } from './interfaces'
 import LocalStorage from './LocalStorage/LocalStorage'
 import SessionStorage from './SessionStorage/SessionStorage'
 
-export type Storage<T extends StorageBase> = Storage<T>
+export type Storage<T extends AnyRecord> = Storage<T>
 export enum StorageType {
   LOCAL,
   SESSION,
@@ -20,7 +21,7 @@ export enum StorageType {
 export const { LOCAL, SESSION }: typeof StorageType = StorageType
 
 interface StorageContextType {
-  getStore<T extends StorageBase>(
+  getStore<T extends AnyRecord>(
     namespace: string,
     type?: StorageType,
   ): Storage<T>
@@ -53,7 +54,7 @@ export interface WithStorage<T> {
 }
 type WithoutStorage<P> = Pick<P, Exclude<keyof P, 'storage'>>
 
-export function withStorage<T extends StorageBase>(
+export function withStorage<T extends AnyRecord>(
   namespace: string,
   type?: StorageType,
 ): <P extends WithStorage<T>>(
@@ -65,9 +66,13 @@ export function withStorage<T extends StorageBase>(
     return function WithStorageCmp(props: WithoutStorage<P>): ReactElement<{}> {
       return (
         <StorageContext.Consumer>
-          {(context: StorageContextType): ReactElement<{}> => (
-            <Cmp storage={context.getStore(namespace, type)} {...props} />
-          )}
+          {(context: StorageContextType): ReactElement<{}> => {
+            const p: P = {
+              ...props,
+              storage: context.getStore(namespace, type),
+            } as P
+            return <Cmp {...p} />
+          }}
         </StorageContext.Consumer>
       )
     }
@@ -88,7 +93,7 @@ class StorageProvider extends Component {
   }
 
   @Bind()
-  private _getStore<T extends StorageBase>(
+  private _getStore<T extends AnyRecord>(
     namespace: string,
     type: StorageType = LOCAL,
   ): Storage<T> {
