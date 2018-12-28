@@ -1,6 +1,6 @@
 import { Bind } from 'lodash-decorators'
 import React, { ReactNode } from 'react'
-import { Route, RouteComponentProps } from 'react-router'
+import { Route, RouteComponentProps } from 'react-router-dom'
 import AbstractRouteConfig from './AbstractRouteConfig'
 
 export type AsString<T extends Record<string | number, unknown>> = {

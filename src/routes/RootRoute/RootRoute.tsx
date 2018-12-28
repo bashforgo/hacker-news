@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router-dom'
 import FeedRoute from '../FeedRoute/FeedRoute'
 import AbstractRouteConfig from '../util/AbstractRouteConfig'
 

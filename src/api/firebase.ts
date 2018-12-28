@@ -1,13 +1,20 @@
 import app from '@firebase/app'
 import { FirebaseApp } from '@firebase/app-types'
 import '@firebase/database'
-import {
-  DataSnapshot,
-  FirebaseDatabase,
-  Reference,
-} from '@firebase/database-types'
+import { FirebaseDatabase, Reference } from '@firebase/database-types'
 import mem from 'mem'
-import { Feed, FeedId, Item, ItemId, User, UserId } from './types'
+import {
+  Feed,
+  FeedId,
+  FeedReader,
+  Item,
+  ItemId,
+  Snapshot,
+  Subscriber,
+  Unsubscriber,
+  User,
+  UserId,
+} from './types'
 
 const projectId: string = 'hacker-news'
 const authDomain: string = `${projectId}.firebaseio.com`
@@ -21,12 +28,6 @@ const firebase: Required<FirebaseApp> = app.initializeApp({
 
 const database: FirebaseDatabase = firebase.database()
 const api: Reference = database.ref('v0')
-
-export interface Snapshot<T = unknown> extends DataSnapshot {
-  val(): T
-}
-export type Subscriber<T = unknown> = (snap: Snapshot<T>) => void
-export type Unsubscriber = () => void
 
 function whenExists<T>(cb: Subscriber<T>): (snap: Snapshot<T> | null) => void {
   return (snap: Snapshot<T> | null): void => {
@@ -56,8 +57,6 @@ export function getUser(id: UserId, cb: Subscriber<User>): Unsubscriber {
   return withUnsubscriber(`user/${id}`, cb)
 }
 
-export type FeedReader = (cb: Subscriber<Feed>) => Unsubscriber
-
 const getFeed: (id: FeedId) => FeedReader = mem(
   (id: FeedId): FeedReader => (cb: Subscriber<Feed>): Unsubscriber =>
     withUnsubscriber(id, cb),
@@ -69,5 +68,3 @@ export const getBestStories: FeedReader = getFeed('beststories')
 export const getAskStories: FeedReader = getFeed('askstories')
 export const getShowStories: FeedReader = getFeed('showstories')
 export const getJobStories: FeedReader = getFeed('jobstories')
-
-export * from './types'

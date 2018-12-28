@@ -10,13 +10,13 @@ import {
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { Component, ComponentType, ReactNode } from 'react'
 import { WithNamespaces, withNamespaces } from 'react-i18next'
+import { getItem } from '../api'
 import {
   Comment as CommentType,
-  getItem,
   ItemId,
   Subscriber,
   Unsubscriber,
-} from '../api'
+} from '../api/types'
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
 import {

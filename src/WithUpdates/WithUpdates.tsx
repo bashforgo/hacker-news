@@ -1,5 +1,5 @@
 import { Component, ReactNode } from 'react'
-import { Snapshot, Subscriber, Unsubscriber } from '../api'
+import { Snapshot, Subscriber, Unsubscriber } from '../api/types'
 
 export type WithUpdatesFrom<T> = (subscriber: Subscriber<T>) => Unsubscriber
 

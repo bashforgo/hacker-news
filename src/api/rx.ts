@@ -1,8 +1,8 @@
 import { from, Observable, Subscriber, TeardownLogic } from 'rxjs'
 import { filter, first, flatMap, map, take, toArray } from 'rxjs/operators'
 import { clamp } from '../util'
-import { Snapshot, withUnsubscriber } from './firebase'
-import { FeedId, Item, ItemId, Items, UserId } from './types'
+import { withUnsubscriber } from './firebase'
+import { Item, ItemId, Items, Snapshot, UserId } from './types'
 
 function getApi$<T>(path: string): Observable<T> {
   return new Observable(

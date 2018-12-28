@@ -10,13 +10,13 @@ import { Bind, Memoize } from 'lodash-decorators'
 import { Star } from 'mdi-material-ui'
 import React, { Component, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'
+import { getUser } from '../api'
 import {
-  getUser,
   Subscriber,
   Unsubscriber,
   User as UserType,
   UserId,
-} from '../api'
+} from '../api/types'
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
 import SubmissionsRoute from '../routes/UserRoute/SubmissionsRoute/SubmissionsRoute'

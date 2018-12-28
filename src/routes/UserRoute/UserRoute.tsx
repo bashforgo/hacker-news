@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { UserId } from '../../api'
+import { UserId } from '../../api/types'
 import User from '../../User/User'
 import SimpleRouteConfig, { AsString } from '../util/SimpleRouteConfig'
 

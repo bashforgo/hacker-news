@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { ItemId } from '../../api'
+import { ItemId } from '../../api/types'
 import Thread from '../../Thread/Thread'
 import SimpleRouteConfig, { AsString } from '../util/SimpleRouteConfig'
 

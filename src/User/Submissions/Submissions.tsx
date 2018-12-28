@@ -2,10 +2,10 @@ import { Button, Grid, LinearProgress, Typography } from '@material-ui/core'
 import { Bind } from 'lodash-decorators'
 import React, { Component, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'
-import { RouteComponentProps, withRouter } from 'react-router'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Subscription } from 'rxjs'
-import { Item, UserId } from '../../api'
-import { filterFeed$, getUserSubmissions$ } from '../../api/rx'
+import { filterFeed$, getUserSubmissions$ } from '../../api'
+import { Item, UserId } from '../../api/types'
 import Headline from '../../Headline/Headline'
 import SubmissionsRoute, {
   Filter,

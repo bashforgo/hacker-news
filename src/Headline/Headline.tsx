@@ -9,9 +9,9 @@ import {
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { Component, ComponentType, ReactNode } from 'react'
 import { WithNamespaces, withNamespaces } from 'react-i18next'
+import { getItem } from '../api'
 import {
   Comment,
-  getItem,
   Item,
   ItemId,
   Job,
@@ -20,7 +20,7 @@ import {
   Story,
   Subscriber,
   Unsubscriber,
-} from '../api'
+} from '../api/types'
 import ContentHtml from '../ContentHtml/ContentHtml'
 import Link from '../Link/Link'
 import ItemRoute from '../routes/ItemRoute/ItemRoute'

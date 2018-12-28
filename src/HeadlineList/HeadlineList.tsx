@@ -11,16 +11,14 @@ import React, { Component, ComponentType, ReactElement, ReactNode } from 'react'
 import { WithNamespaces, withNamespaces } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import {
-  FeedReader,
   getAskStories,
   getBestStories,
   getJobStories,
   getNewStories,
   getShowStories,
   getTopStories,
-  ItemId,
-  Items,
 } from '../api'
+import { FeedReader, ItemId, Items } from '../api/types'
 import Headline from '../Headline/Headline'
 import Paginated from '../Paginated/Paginated'
 import FeedRoute, { MainFeed } from '../routes/FeedRoute/FeedRoute'

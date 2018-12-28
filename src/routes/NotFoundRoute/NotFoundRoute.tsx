@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core'
 import React, { ReactNode } from 'react'
-import { Route } from 'react-router'
+import { Route } from 'react-router-dom'
 import FullPage from '../../FullPage/FullPage'
 import RouteConfig from '../util/RouteConfig'
 
