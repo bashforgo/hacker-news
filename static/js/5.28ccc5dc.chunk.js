@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{3768:function(n){n.exports={points:"{{ count }} point",points_plural:"{{ count }} points",by:"by",comments:"{{ count }} comment",comments_plural:"{{ count }} comments"}}}]);
-//# sourceMappingURL=5.28ccc5dc.chunk.js.map

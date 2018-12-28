@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{3766:function(e){e.exports={appName:"Hacker News",close:"close",date:"{{ date | date }}",timeDistance:"{{ time | distance }}"}}}]);
+//# sourceMappingURL=11.66bacfc9.chunk.js.map
