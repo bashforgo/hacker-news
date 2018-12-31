@@ -1,10 +1,9 @@
 import { TranslationFunction } from 'i18next'
-import React, { lazy, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { NamespacesConsumer } from 'react-i18next'
 import { Route } from 'react-router-dom'
 import EmptyPlaceHolder from '../../EmptyPlaceholder/EmptyPlaceHolder'
-import RouteConfig from '../util/RouteConfig'
-import withSuspense from '../util/withSuspense'
+import { RouteConfig, withSuspense } from '../util'
 
 class NotFoundRoute implements RouteConfig {
   public makeURL(): never {

@@ -1,6 +1,5 @@
-import React, { lazy, ReactNode, Suspense } from 'react'
-import SimpleRouteConfig, { AsString } from '../util/SimpleRouteConfig'
-import withSuspense from '../util/withSuspense'
+import React, { lazy, ReactNode } from 'react'
+import { AsString, SimpleRouteConfig, withSuspense } from '../util'
 
 // tslint:disable-next-line:typedef
 const HeadlineList = lazy(() => import('../../HeadlineList/HeadlineList'))

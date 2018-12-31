@@ -2,7 +2,7 @@ import { EMPTY, from, Observable, Subscriber, TeardownLogic } from 'rxjs'
 import { filter, first, flatMap, map, take, toArray } from 'rxjs/operators'
 import { Optional } from '../types'
 import { clamp } from '../util'
-import { withUnsubscriber } from './firebase'
+import { withUnsubscriber } from './'
 import { Item, ItemId, Items, Snapshot, UserId } from './types'
 
 function getApi$<T>(path: string): Observable<Optional<T>> {

@@ -1,4 +1,4 @@
-import { Button, Grid, LinearProgress, Typography } from '@material-ui/core'
+import { Button, Grid, LinearProgress } from '@material-ui/core'
 import { Bind } from 'lodash-decorators'
 import React, { Component, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'

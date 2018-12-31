@@ -2,13 +2,13 @@ import { Bind } from 'lodash-decorators'
 import React, { ReactNode } from 'react'
 import { Route, RouteComponentProps } from 'react-router-dom'
 import { AnyRecord } from '../../types'
-import AbstractRouteConfig from './AbstractRouteConfig'
+import { AbstractRouteConfig } from './AbstractRouteConfig'
 
 export type AsString<T extends AnyRecord> = {
   [k in keyof T]: T[k] extends string ? T[k] : string
 }
 
-abstract class SimpleRouteConfig<
+export abstract class SimpleRouteConfig<
   Params extends AnyRecord = {}
 > extends AbstractRouteConfig<Params> {
   public use(): ReactNode {
@@ -24,5 +24,3 @@ abstract class SimpleRouteConfig<
     return match ? this.translateParams(match.params) : null
   }
 }
-
-export default SimpleRouteConfig

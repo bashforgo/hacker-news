@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Redirect } from 'react-router-dom'
 import FeedRoute from '../FeedRoute/FeedRoute'
-import AbstractRouteConfig from '../util/AbstractRouteConfig'
+import { AbstractRouteConfig } from '../util'
 
 class RootRoute extends AbstractRouteConfig {
   protected URL: string = '/'
