@@ -6,6 +6,7 @@ import {
   Theme,
 } from '@material-ui/core'
 import { indigo } from '@material-ui/core/colors'
+import { CSSProperties } from '@material-ui/core/styles/withStyles'
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { ReactNode } from 'react'
 import { noop } from '../../util'
@@ -15,6 +16,7 @@ declare module '@material-ui/core/styles/createMixins' {
   interface Mixins {
     appMaxWidth: number
     toolbarMaxWidth: number
+    feedLink: CSSProperties
   }
 }
 
@@ -94,6 +96,12 @@ class ThemeProvider extends React.Component<
       mixins: {
         appMaxWidth: 8 * 120,
         toolbarMaxWidth: 8 * 150,
+        feedLink: {
+          fontWeight: 300,
+          '&.isActive::before': {
+            content: '"> "',
+          },
+        },
       },
       palette: {
         type,

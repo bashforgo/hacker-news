@@ -1,113 +1,37 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  PaletteType,
-  withMobileDialog,
-} from '@material-ui/core'
-import { DialogProps } from '@material-ui/core/Dialog'
-import { StyleRules, WithStyles, withStyles } from '@material-ui/core/styles'
+import { IconButton } from '@material-ui/core'
+import { Bind } from 'lodash-decorators'
 import { Settings as SettingsIcon } from 'mdi-material-ui'
-import React, { Component, ComponentType, ReactElement, ReactNode } from 'react'
+import React, { Component, lazy, ReactNode } from 'react'
 import { withNamespaces, WithNamespaces } from 'react-i18next'
-import {
-  LanguageContext,
-  LanguageContextType,
-} from '../../Root/LanguageProvider/LanguageProvider'
-import {
-  ThemeContext,
-  ThemeContextType,
-} from '../../Root/ThemeProvider/ThemeProvider'
+import OnDemand from '../../OnDemand/OnDemand'
 import WithToggle from '../../WithToggle/WithToggle'
-import { OptionList } from './OptionList/OptionList'
 
-const withSettingsNamespace: ReturnType<typeof withNamespaces> = withNamespaces(
-  'Settings',
-)
+// tslint:disable-next-line:typedef
+const Dialog = lazy(() => import('./Dialog/Dialog'))
 
-const LanguageSettings: ComponentType = withSettingsNamespace(
-  ({ t }: WithNamespaces): ReactElement<{}> => {
-    const languages: { [language: string]: string } = t('languages', {
-      returnObjects: true,
-    })
-
-    return (
-      <LanguageContext.Consumer>
-        {(context: LanguageContextType): ReactNode =>
-          OptionList(
-            t('language'),
-            languages,
-            (language: string) => (): void => context.setLanguage(language),
-            (language: string) => context.selectedLanguage === language,
-          )
-        }
-      </LanguageContext.Consumer>
-    )
-  },
-)
-const ThemeSettings: ComponentType = withSettingsNamespace(
-  ({ t }: WithNamespaces): ReactElement<{}> => {
-    const themes: { [language in PaletteType]: string } = t('themes', {
-      returnObjects: true,
-    })
-
-    return (
-      <ThemeContext.Consumer>
-        {(context: ThemeContextType): ReactNode =>
-          OptionList(
-            t('theme'),
-            themes,
-            (theme: PaletteType) => (): void => context.setTheme(theme),
-            (theme: PaletteType) => context.selectedTheme === theme,
-          )
-        }
-      </ThemeContext.Consumer>
-    )
-  },
-)
-
-const ResponsiveDialog: ComponentType<DialogProps> = withMobileDialog<
-  DialogProps
->()(Dialog)
-
-const styles: StyleRules = {
-  dialogContent: { padding: 0 },
-}
-
-class Settings extends Component<WithNamespaces & WithStyles> {
+class Settings extends Component<WithNamespaces> {
   public render(): ReactNode {
-    const { t, classes }: Settings['props'] = this.props
+    return <WithToggle initial={false}>{this._withToggle}</WithToggle>
+  }
 
+  @Bind()
+  private _withToggle(open: boolean, toggle: () => void): ReactNode {
     return (
-      <WithToggle initial={false}>
-        {(state: boolean, toggle: () => void): ReactNode => (
-          <>
-            <IconButton
-              onClick={toggle}
-              color="inherit"
-              aria-label={t('settings')}
-              aria-haspopup
-            >
-              <SettingsIcon />
-            </IconButton>
-            <ResponsiveDialog open={state} onClose={toggle}>
-              <DialogTitle>{t('settings')}</DialogTitle>
-              <DialogContent className={classes.dialogContent}>
-                <LanguageSettings />
-                <ThemeSettings />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={toggle}>{t('shared:close')}</Button>
-              </DialogActions>
-            </ResponsiveDialog>
-          </>
-        )}
-      </WithToggle>
+      <>
+        <IconButton
+          onClick={toggle}
+          color="inherit"
+          aria-label={this.props.t('settings')}
+          aria-haspopup
+        >
+          <SettingsIcon />
+        </IconButton>
+        <OnDemand render={open}>
+          <Dialog open={open} toggle={toggle} />
+        </OnDemand>
+      </>
     )
   }
 }
 
-export default withSettingsNamespace(withStyles(styles)(Settings))
+export default withNamespaces('Settings')(Settings)

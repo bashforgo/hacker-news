@@ -3,5 +3,6 @@
   "points_plural": "{{ count }} points",
   "by": "by",
   "comments": "{{ count }} comment",
-  "comments_plural": "{{ count }} comments"
+  "comments_plural": "{{ count }} comments",
+  "parent": "parent"
 }

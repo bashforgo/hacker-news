@@ -27,7 +27,7 @@ import ItemRoute from '../routes/ItemRoute/ItemRoute'
 import UserRoute from '../routes/UserRoute/UserRoute'
 import Time from '../Time/Time'
 import { Optional } from '../types'
-import { interleave } from '../util/interleave'
+import { interleave } from '../util'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 interface HeadlineProps {
