@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[12],{3758:function(e){e.exports={settings:"Settings",language:"Language",languages:{"en-GB":"English (UK)","en-US":"English (US)"},theme:"Theme",themes:{light:"Light",dark:"Dark"}}}}]);
+//# sourceMappingURL=12.119db29d.chunk.js.map
