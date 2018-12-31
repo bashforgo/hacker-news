@@ -1,5 +1,6 @@
 import { format as formatDate, formatDistance, Locale } from 'date-fns'
 import i18next, { i18n } from 'i18next'
+import { Optional } from '../types'
 
 export function setup(initLanguage: string): Promise<i18n> {
   let currentLocale: Locale | undefined
@@ -12,7 +13,7 @@ export function setup(initLanguage: string): Promise<i18n> {
           read(
             language: string,
             namespace: string,
-            callback: (err: Error | null, result?: object) => void,
+            callback: (err: Optional<Error>, result?: object) => void,
           ): void {
             import(`./locales/${language}/${namespace}.json`)
               .then((result: object) => callback(null, result))
@@ -44,7 +45,7 @@ export function setup(initLanguage: string): Promise<i18n> {
                   }
                   case 'date': {
                     if (typeof value !== 'number') {
-                      throw new Error('invalid distance value')
+                      throw new Error('invalid date value')
                     }
                     return formatDate(new Date(1000 * value), 'PP', {
                       locale: currentLocale,
@@ -58,6 +59,20 @@ export function setup(initLanguage: string): Promise<i18n> {
             react: {
               wait: true,
             },
+            ...(process.env.NODE_ENV === 'development'
+              ? {
+                  saveMissing: true,
+                  missingKeyHandler(
+                    lngs: string[],
+                    ns: string,
+                    key: string,
+                    fallbackValue: string,
+                  ): void {
+                    // tslint:disable-next-line no-console
+                    console.warn('missing key:', lngs, ns, key, fallbackValue)
+                  },
+                }
+              : {}),
           },
           (error: unknown) => {
             if (error) {

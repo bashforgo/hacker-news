@@ -22,6 +22,7 @@ import { FeedReader, ItemId, Items } from '../api/types'
 import Headline from '../Headline/Headline'
 import Paginated from '../Paginated/Paginated'
 import FeedRoute, { MainFeed } from '../routes/FeedRoute/FeedRoute'
+import { Optional } from '../types'
 import { clamp } from '../util'
 import WithUpdates from '../WithUpdates/WithUpdates'
 
@@ -65,7 +66,8 @@ class HeadlineList extends Component<
   }
 
   @Bind()
-  private _paginated(data: Items = []): ReactNode {
+  private _paginated(_data?: Optional<Items>): ReactNode {
+    const data: Items = _data || []
     return (
       <Paginated data={data} page={this._getPage()} pageSize={PAGE_SIZE}>
         {this._renderList}
@@ -75,7 +77,7 @@ class HeadlineList extends Component<
 
   @Bind()
   private _renderList(items: Items, numberOfPages: number): ReactNode {
-    const { classes, t }: this['props'] = this.props
+    const { classes }: this['props'] = this.props
 
     return (
       <article>

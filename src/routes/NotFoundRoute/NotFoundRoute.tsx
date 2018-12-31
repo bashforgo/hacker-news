@@ -1,11 +1,10 @@
-import { Typography } from '@material-ui/core'
+import { TranslationFunction } from 'i18next'
 import React, { lazy, ReactNode } from 'react'
+import { NamespacesConsumer } from 'react-i18next'
 import { Route } from 'react-router-dom'
+import EmptyPlaceHolder from '../../EmptyPlaceholder/EmptyPlaceHolder'
 import RouteConfig from '../util/RouteConfig'
 import withSuspense from '../util/withSuspense'
-
-// tslint:disable:typedef
-const FullPage = lazy(() => import('../../FullPage/FullPage'))
 
 class NotFoundRoute implements RouteConfig {
   public makeURL(): never {
@@ -15,11 +14,15 @@ class NotFoundRoute implements RouteConfig {
   public use(): ReactNode {
     return withSuspense(
       <Route>
-        <FullPage>
-          <Typography variant="h2">404</Typography>
-        </FullPage>
+        <NamespacesConsumer ns={'NotFoundRoute'}>
+          {this._render}
+        </NamespacesConsumer>
       </Route>,
     )
+  }
+
+  private _render(t: TranslationFunction): ReactNode {
+    return <EmptyPlaceHolder message={t('empty')} />
   }
 }
 

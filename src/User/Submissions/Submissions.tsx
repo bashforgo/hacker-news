@@ -6,6 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Subscription } from 'rxjs'
 import { filterFeed$, getUserSubmissions$ } from '../../api/rx'
 import { Item, UserId } from '../../api/types'
+import EmptyPlaceHolder from '../../EmptyPlaceholder/EmptyPlaceHolder'
 import Headline from '../../Headline/Headline'
 import SubmissionsRoute, {
   Filter,
@@ -69,19 +70,10 @@ class Submissions extends Component<
 
   private _renderEmptyPlaceholder(): ReactNode {
     const { loading, items }: this['state'] = this.state
-    const { t }: this['props'] = this.props
+    const { t, filter }: this['props'] = this.props
 
     return loading || items.length ? null : (
-      <Grid container spacing={16} alignItems="center" direction="column">
-        <Grid item>
-          <Typography variant="h6">{t('empty')}</Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="h4" aria-label={t('shrugLabel')}>
-            {t('shrug')}
-          </Typography>
-        </Grid>
-      </Grid>
+      <EmptyPlaceHolder message={t('empty', { context: filter })} />
     )
   }
 

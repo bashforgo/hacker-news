@@ -1,6 +1,5 @@
 {
   "more": "more",
-  "empty": "Nothing here.",
-  "shrug": "¯\\_(ツ)_/¯",
-  "shrugLabel": "shrug"
+  "empty_submissions": "No submissions",
+  "empty_comments": "No comments"
 }

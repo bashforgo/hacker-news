@@ -1,12 +1,13 @@
-import { from, Observable, Subscriber, TeardownLogic } from 'rxjs'
+import { EMPTY, from, Observable, Subscriber, TeardownLogic } from 'rxjs'
 import { filter, first, flatMap, map, take, toArray } from 'rxjs/operators'
+import { Optional } from '../types'
 import { clamp } from '../util'
 import { withUnsubscriber } from './firebase'
 import { Item, ItemId, Items, Snapshot, UserId } from './types'
 
-function getApi$<T>(path: string): Observable<T> {
+function getApi$<T>(path: string): Observable<Optional<T>> {
   return new Observable(
-    (subscriber: Subscriber<T>): TeardownLogic => {
+    (subscriber: Subscriber<Optional<T>>): TeardownLogic => {
       return withUnsubscriber(path, (snap: Snapshot<T>) => {
         subscriber.next(snap.val())
       })
@@ -14,11 +15,11 @@ function getApi$<T>(path: string): Observable<T> {
   )
 }
 
-export function getItem$(id: ItemId): Observable<Item> {
+export function getItem$(id: ItemId): Observable<Optional<Item>> {
   return getApi$(`item/${id}`)
 }
 
-export function getUserSubmissions$(id: UserId): Observable<Items> {
+export function getUserSubmissions$(id: UserId): Observable<Optional<Items>> {
   return getApi$(`user/${id}/submitted`)
 }
 
@@ -28,19 +29,21 @@ interface WithLeft {
 }
 
 export function filterFeed$(
-  feed$: Observable<Items>,
+  feed$: Observable<Optional<Items>>,
   predicate: (item: Item) => boolean,
   limit: number = Infinity,
 ): Observable<WithLeft> {
   interface WithLength {
     length: number
-    item$$: Observable<Observable<Item>>
+    item$$: Observable<Observable<Optional<Item>>>
   }
 
   return feed$.pipe(
-    map((items: Items) => items.map((id: ItemId) => getItem$(id))),
+    map((items: Optional<Items>) =>
+      items ? items.map((id: ItemId) => getItem$(id)) : [],
+    ),
     map(
-      (item$s: Array<Observable<Item>>): WithLength => ({
+      (item$s: Array<Observable<Optional<Item>>>): WithLength => ({
         length: item$s.length,
         item$$: from(item$s),
       }),
@@ -51,11 +54,17 @@ export function filterFeed$(
       let lastFiltered: number = 0
 
       return item$$.pipe(
-        flatMap((item$: Observable<Item>) => item$.pipe(first()), parallel),
-        filter((item: Item, index: number) => {
-          lastFiltered = index
-          return predicate(item)
-        }),
+        flatMap(
+          (item$: Observable<Optional<Item>>) =>
+            item$ ? item$.pipe(first()) : EMPTY,
+          parallel,
+        ),
+        filter(
+          (item: Optional<Item>, index: number): item is Item => {
+            lastFiltered = index
+            return !!item && predicate(item)
+          },
+        ),
         take(limit),
         toArray(),
         map(

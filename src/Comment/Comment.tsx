@@ -27,6 +27,7 @@ import {
 import ItemRoute from '../routes/ItemRoute/ItemRoute'
 import UserRoute from '../routes/UserRoute/UserRoute'
 import Time from '../Time/Time'
+import { Optional } from '../types'
 import WithToggle from '../WithToggle/WithToggle'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
@@ -108,7 +109,7 @@ class Comment extends Component<
   }
 
   @Bind()
-  private _renderComment(comment?: CommentType): ReactNode {
+  private _renderComment(comment?: Optional<CommentType>): ReactNode {
     if (!comment) return null
     const { by, text, time, dead, deleted }: CommentType = comment
     if (dead || deleted) return null

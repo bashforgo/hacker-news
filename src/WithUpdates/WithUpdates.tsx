@@ -1,15 +1,16 @@
 import { Component, ReactNode } from 'react'
 import { Snapshot, Subscriber, Unsubscriber } from '../api/types'
+import { Optional } from '../types'
 
 export type WithUpdatesFrom<T> = (subscriber: Subscriber<T>) => Unsubscriber
 
 interface WithUpdatesProps<T> {
   from: WithUpdatesFrom<T>
-  children(data?: T): ReactNode
+  children(data?: Optional<T>): ReactNode
 }
 
 interface WithUpdatesState<T> {
-  data?: T
+  data?: Optional<T>
 }
 
 class WithUpdates<T> extends Component<

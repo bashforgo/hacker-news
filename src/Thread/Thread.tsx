@@ -8,10 +8,13 @@ import {
 } from '@material-ui/core/styles'
 import { Bind, Memoize } from 'lodash-decorators'
 import React, { Component, ReactNode } from 'react'
+import { withNamespaces, WithNamespaces } from 'react-i18next'
 import { getItem } from '../api'
 import { Item, ItemId, Subscriber, Unsubscriber } from '../api/types'
 import Comment from '../Comment/Comment'
+import EmptyPlaceHolder from '../EmptyPlaceholder/EmptyPlaceHolder'
 import Headline from '../Headline/Headline'
+import { Optional } from '../types'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 export interface ThreadProps {
@@ -28,7 +31,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   },
 })
 
-class Thread extends Component<ThreadProps & WithStyles> {
+class Thread extends Component<ThreadProps & WithStyles & WithNamespaces> {
   public render(): ReactNode {
     const { classes, id }: this['props'] = this.props
 
@@ -50,8 +53,9 @@ class Thread extends Component<ThreadProps & WithStyles> {
   }
 
   @Bind()
-  private _renderItem(data?: Item): ReactNode {
-    if (!data) return null
+  private _renderItem(data?: Optional<Item>): ReactNode {
+    if (data === undefined) return null
+    if (data === null) return this._empty()
 
     return (
       <>
@@ -59,6 +63,10 @@ class Thread extends Component<ThreadProps & WithStyles> {
         {this._renderComments(data)}
       </>
     )
+  }
+
+  private _empty(): ReactNode {
+    return <EmptyPlaceHolder message={this.props.t('empty')} />
   }
 
   private _renderComments(data: Item): ReactNode {
@@ -84,4 +92,4 @@ class Thread extends Component<ThreadProps & WithStyles> {
   }
 }
 
-export default withStyles(styles)(Thread)
+export default withNamespaces('Thread')(withStyles(styles)(Thread))

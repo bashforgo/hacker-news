@@ -6,6 +6,7 @@ import {
   ReactElement,
   ReactNode,
 } from 'react'
+import { Optional } from '../types'
 import { PENDING, REJECTED, RESOLVED, StatefulPromise } from '../util'
 import Pending from './Pending'
 import Rejected, { RejectedProps } from './Rejected'
@@ -59,10 +60,9 @@ class Async<T> extends Component<AsyncProps<T>, AsyncState<T>> {
 
   public render(): ReactNode {
     const stateToChild: StateToChild<T> = this._getStateToChild()
-    let element:
-      | null
-      | ReactElement<ResolvedProps<T>>
-      | ReactElement<RejectedProps> = null
+    let element: Optional<
+      ReactElement<ResolvedProps<T>> | ReactElement<RejectedProps>
+    > = null
 
     switch (this.state.promise.state) {
       case PENDING:

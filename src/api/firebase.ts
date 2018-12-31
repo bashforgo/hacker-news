@@ -3,6 +3,7 @@ import { FirebaseApp } from '@firebase/app-types'
 import '@firebase/database'
 import { FirebaseDatabase, Reference } from '@firebase/database-types'
 import mem from 'mem'
+import { Optional } from '../types'
 import {
   Feed,
   FeedId,
@@ -29,8 +30,10 @@ const firebase: Required<FirebaseApp> = app.initializeApp({
 const database: FirebaseDatabase = firebase.database()
 const api: Reference = database.ref('v0')
 
-function whenExists<T>(cb: Subscriber<T>): (snap: Snapshot<T> | null) => void {
-  return (snap: Snapshot<T> | null): void => {
+function whenExists<T>(
+  cb: Subscriber<T>,
+): (snap: Optional<Snapshot<T>>) => void {
+  return (snap: Optional<Snapshot<T>>): void => {
     if (snap) cb(snap)
   }
 }

@@ -1,4 +1,5 @@
-import React, { Component, ReactNode } from 'react'
+import { Component, ReactNode } from 'react'
+import { Optional } from '../types'
 import { arrayEquals } from '../util'
 
 interface PaginatedProps<T = unknown> {
@@ -28,7 +29,7 @@ class Paginated<T = unknown> extends Component<
   public static getDerivedStateFromProps<T = unknown>(
     nextProps: PaginatedProps<T>,
     { paginated }: PaginatedState<T>,
-  ): Partial<PaginatedState<T>> | null {
+  ): Optional<Partial<PaginatedState<T>>> {
     const nextPaginated: T[] = paginate(nextProps)
 
     return arrayEquals(paginated, nextPaginated)

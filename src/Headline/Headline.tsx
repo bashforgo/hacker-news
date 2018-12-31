@@ -26,6 +26,7 @@ import Link from '../Link/Link'
 import ItemRoute from '../routes/ItemRoute/ItemRoute'
 import UserRoute from '../routes/UserRoute/UserRoute'
 import Time from '../Time/Time'
+import { Optional } from '../types'
 import { interleave } from '../util/interleave'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
@@ -80,7 +81,7 @@ class Headline extends Component<HeadlineProps & WithStyles & WithNamespaces> {
   }
 
   @Bind()
-  private _renderItem(item?: Item): ReactNode {
+  private _renderItem(item?: Optional<Item>): ReactNode {
     return <section>{item ? this._item(item) : this._empty()}</section>
   }
 

@@ -18,8 +18,10 @@ import {
   UserId,
 } from '../api/types'
 import ContentHtml from '../ContentHtml/ContentHtml'
+import EmptyPlaceHolder from '../EmptyPlaceholder/EmptyPlaceHolder'
 import Link from '../Link/Link'
 import SubmissionsRoute from '../routes/UserRoute/SubmissionsRoute/SubmissionsRoute'
+import { Optional } from '../types'
 import WithUpdates, { WithUpdatesFrom } from '../WithUpdates/WithUpdates'
 
 interface UserProps {
@@ -99,8 +101,10 @@ class User extends Component<UserProps & WithStyles & WithNamespaces> {
   }
 
   @Bind()
-  private _renderUser(user: UserType): ReactNode {
-    if (!user) return null
+  private _renderUser(user?: Optional<UserType>): ReactNode {
+    if (user === undefined) return null
+    if (user === null) return this._empty()
+
     const { classes, t }: this['props'] = this.props
     const { id, created, karma, about }: UserType = user
 
@@ -163,6 +167,10 @@ class User extends Component<UserProps & WithStyles & WithNamespaces> {
         </Grid>
       </>
     )
+  }
+
+  private _empty(): ReactNode {
+    return <EmptyPlaceHolder message={this.props.t('empty')} />
   }
 
   @Bind()
