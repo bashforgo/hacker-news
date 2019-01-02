@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[10],{3756:function(e){e.exports={previous:"prev",next:"next",title_top:"{{ | t shared:appName }}",title_new:"new | {{ | t shared:appName }}",title_best:"best | {{ | t shared:appName }}",title_ask:"ask | {{ | t shared:appName }}",title_show:"show | {{ | t shared:appName }}",title_job:"jobs | {{ | t shared:appName }}"}}}]);
+//# sourceMappingURL=10.bb4a59a1.chunk.js.map

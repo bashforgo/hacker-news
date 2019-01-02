@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[15],{3761:function(e){e.exports={usernameCaption:"User:",createdCaption:"Member since:",aboutCaption:"About:",submissions:"Submissions",comments:"Comments",empty:"User not found",title:"user | {{ id }} | {{ | t shared:appName }}"}}}]);
+//# sourceMappingURL=15.fef673c8.chunk.js.map
