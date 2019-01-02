@@ -4,5 +4,6 @@
   "aboutCaption": "About:",
   "submissions": "Submissions",
   "comments": "Comments",
-  "empty": "User not found"
+  "empty": "User not found",
+  "title": "user | {{ id }} | {{ | t shared:appName }}"
 }

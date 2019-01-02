@@ -52,6 +52,9 @@ export function setup(initLanguage: string): Promise<i18n> {
                     })
                   }
                   default:
+                    if (format && format.startsWith('t ')) {
+                      return i18next.t(format.split('t ')[1])
+                    }
                     throw new Error('formatter not implemented')
                 }
               },

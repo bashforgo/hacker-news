@@ -1,4 +1,10 @@
 {
   "previous": "prev",
-  "next": "next"
+  "next": "next",
+  "title_top": "{{ | t shared:appName }}",
+  "title_new": "new | {{ | t shared:appName }}",
+  "title_best": "best | {{ | t shared:appName }}",
+  "title_ask": "ask | {{ | t shared:appName }}",
+  "title_show": "show | {{ | t shared:appName }}",
+  "title_job": "jobs | {{ | t shared:appName }}"
 }

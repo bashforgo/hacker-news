@@ -18,6 +18,7 @@ import {
   UserId,
 } from '../api/types'
 import ContentHtml from '../ContentHtml/ContentHtml'
+import DocumentTitle from '../DocumentTitle/DocumentTitle'
 import EmptyPlaceHolder from '../EmptyPlaceholder/EmptyPlaceHolder'
 import Link from '../Link/Link'
 import SubmissionsRoute from '../routes/UserRoute/SubmissionsRoute/SubmissionsRoute'
@@ -76,6 +77,7 @@ const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
   },
   about: {
     gridArea: 'about',
+    maxWidth: '70vw',
   },
   links: {
     gridArea: 'links',
@@ -109,63 +111,62 @@ class User extends Component<UserProps & WithStyles & WithNamespaces> {
     const { id, created, karma, about }: UserType = user
 
     return (
-      <>
-        <Grid container justify="center">
-          <Grid item className={classes.container}>
-            <Typography className={classes.usernameCaption}>
-              {t('usernameCaption')}
-            </Typography>
-            <Typography
-              className={classes.username}
-              aria-labelledby={classes.usernameCaption}
+      <Grid container justify="center">
+        <DocumentTitle>{t('title', { id })}</DocumentTitle>
+        <Grid item className={classes.container}>
+          <Typography className={classes.usernameCaption}>
+            {t('usernameCaption')}
+          </Typography>
+          <Typography
+            className={classes.username}
+            aria-labelledby={classes.usernameCaption}
+          >
+            {id}
+          </Typography>
+          <Typography className={classes.createdCaption}>
+            {t('createdCaption')}
+          </Typography>
+          <Typography
+            className={classes.created}
+            aria-labelledby={classes.createdCaption}
+          >
+            {t('shared:date', { date: created })}
+          </Typography>
+          <Typography className={classes.karma} variant="h4">
+            <Star fontSize="inherit" />
+            {karma}
+          </Typography>
+          <Typography className={classes.aboutCaption}>
+            {t('aboutCaption')}
+          </Typography>
+          <ContentHtml
+            className={classes.about}
+            aria-labelledby={classes.aboutCaption}
+          >
+            {about}
+          </ContentHtml>
+          <Typography className={classes.links} component="section">
+            <Link
+              className={classes.link}
+              href={SubmissionsRoute.makeURL({
+                id,
+                filter: 'submissions',
+              })}
             >
-              {id}
-            </Typography>
-            <Typography className={classes.createdCaption}>
-              {t('createdCaption')}
-            </Typography>
-            <Typography
-              className={classes.created}
-              aria-labelledby={classes.createdCaption}
+              {t('submissions')}
+            </Link>
+            <Link
+              className={classes.link}
+              href={SubmissionsRoute.makeURL({ id, filter: 'comments' })}
             >
-              {t('shared:date', { date: created })}
-            </Typography>
-            <Typography className={classes.karma} variant="h4">
-              <Star fontSize="inherit" />
-              {karma}
-            </Typography>
-            <Typography className={classes.aboutCaption}>
-              {t('aboutCaption')}
-            </Typography>
-            <ContentHtml
-              className={classes.about}
-              aria-labelledby={classes.aboutCaption}
-            >
-              {about}
-            </ContentHtml>
-            <Typography className={classes.links} component="section">
-              <Link
-                className={classes.link}
-                href={SubmissionsRoute.makeURL({
-                  id,
-                  filter: 'submissions',
-                })}
-              >
-                {t('submissions')}
-              </Link>
-              <Link
-                className={classes.link}
-                href={SubmissionsRoute.makeURL({ id, filter: 'comments' })}
-              >
-                {t('comments')}
-              </Link>
-            </Typography>
-            <section className={classes.submissions}>
-              {SubmissionsRoute.use()}
-            </section>
-          </Grid>
+              {t('comments')}
+            </Link>
+          </Typography>
+          <section className={classes.submissions}>
+            {SubmissionsRoute.use()}
+          </section>
         </Grid>
-      </>
+      </Grid>
     )
   }
 

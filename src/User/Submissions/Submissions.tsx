@@ -6,6 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Subscription } from 'rxjs'
 import { filterFeed$, getUserSubmissions$ } from '../../api/rx'
 import { Item, UserId } from '../../api/types'
+import DocumentTitle from '../../DocumentTitle/DocumentTitle'
 import EmptyPlaceHolder from '../../EmptyPlaceholder/EmptyPlaceHolder'
 import Headline from '../../Headline/Headline'
 import SubmissionsRoute, {
@@ -56,10 +57,13 @@ class Submissions extends Component<
   }
 
   public render(): ReactNode {
+    const { t, filter, id }: this['props'] = this.props
+
     return (
       <>
+        <DocumentTitle>{t('title', { id, context: filter })}</DocumentTitle>
         {this._renderEmptyPlaceholder()}
-        {this.props.filter === 'comments'
+        {filter === 'comments'
           ? this._renderComments()
           : this._renderSubmissions()}
         {this.state.loading ? <LinearProgress /> : null}

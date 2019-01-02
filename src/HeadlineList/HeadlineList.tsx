@@ -19,6 +19,7 @@ import {
   getTopStories,
 } from '../api'
 import { FeedReader, ItemId, Items } from '../api/types'
+import DocumentTitle from '../DocumentTitle/DocumentTitle'
 import Headline from '../Headline/Headline'
 import Paginated from '../Paginated/Paginated'
 import FeedRoute, { MainFeed } from '../routes/FeedRoute/FeedRoute'
@@ -77,10 +78,13 @@ class HeadlineList extends Component<
 
   @Bind()
   private _renderList(items: Items, numberOfPages: number): ReactNode {
-    const { classes }: this['props'] = this.props
+    const { classes, t }: this['props'] = this.props
 
     return (
       <article>
+        <DocumentTitle>
+          {t('title', { context: this._getFeed() })}
+        </DocumentTitle>
         <Grid container justify="center">
           <Grid item component="ul" className={classes.list}>
             {items.map(

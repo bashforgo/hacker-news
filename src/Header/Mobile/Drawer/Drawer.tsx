@@ -1,4 +1,4 @@
-import { Drawer as MuiDrawer, List, ListItem } from '@material-ui/core'
+import { Drawer as MuiDrawer, List } from '@material-ui/core'
 import {
   StyleRules,
   StyleRulesCallback,
@@ -17,7 +17,11 @@ interface DrawerProps {
 }
 
 const styles: StyleRulesCallback = (theme: Theme): StyleRules => ({
-  feedLink: theme.mixins.feedLink,
+  feedLink: {
+    ...theme.mixins.feedLink,
+    padding: theme.spacing.unit,
+    width: '100%',
+  },
   drawer: {
     minWidth: '50vw',
   },
@@ -32,7 +36,7 @@ class Drawer extends Component<DrawerProps & WithStyles & WithNamespaces> {
         <nav>
           <List className={classes.drawer} aria-label={t('feeds')}>
             {feeds.map((feed: MainFeed) => (
-              <ListItem key={feed} button component="li">
+              <li key={feed}>
                 <Link
                   href={FeedRoute.makeURL({ feed })}
                   color="textPrimary"
@@ -42,7 +46,7 @@ class Drawer extends Component<DrawerProps & WithStyles & WithNamespaces> {
                 >
                   {t(feed)}
                 </Link>
-              </ListItem>
+              </li>
             ))}
           </List>
         </nav>

@@ -1,3 +1,4 @@
 {
-  "empty": "Page not found"
+  "empty": "Page not found",
+  "title": "{{ | t shared:shrug }} | {{ | t shared:appName }}"
 }

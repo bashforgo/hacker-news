@@ -2,5 +2,6 @@
   "appName": "Hacker News",
   "close": "close",
   "date": "{{ date | date }}",
-  "timeDistance": "{{ time | distance }}"
+  "timeDistance": "{{ time | distance }}",
+  "shrug": "¯\\_(ツ)_/¯"
 }

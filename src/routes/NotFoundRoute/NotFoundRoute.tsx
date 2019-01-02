@@ -2,6 +2,7 @@ import { TranslationFunction } from 'i18next'
 import React, { ReactNode } from 'react'
 import { NamespacesConsumer } from 'react-i18next'
 import { Route } from 'react-router-dom'
+import DocumentTitle from '../../DocumentTitle/DocumentTitle'
 import EmptyPlaceHolder from '../../EmptyPlaceholder/EmptyPlaceHolder'
 import { RouteConfig, withSuspense } from '../util'
 
@@ -21,7 +22,12 @@ class NotFoundRoute implements RouteConfig {
   }
 
   private _render(t: TranslationFunction): ReactNode {
-    return <EmptyPlaceHolder message={t('empty')} />
+    return (
+      <>
+        <DocumentTitle>{t('title')}</DocumentTitle>
+        <EmptyPlaceHolder message={t('empty')} />
+      </>
+    )
   }
 }
 

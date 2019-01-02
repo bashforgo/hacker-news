@@ -4,5 +4,6 @@
   "by": "by",
   "comments": "{{ count }} comment",
   "comments_plural": "{{ count }} comments",
-  "parent": "parent"
+  "parent": "parent",
+  "poll": "poll"
 }

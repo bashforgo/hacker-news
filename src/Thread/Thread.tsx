@@ -12,6 +12,7 @@ import { withNamespaces, WithNamespaces } from 'react-i18next'
 import { getItem } from '../api'
 import { Item, ItemId, Subscriber, Unsubscriber } from '../api/types'
 import Comment from '../Comment/Comment'
+import DocumentTitle from '../DocumentTitle/DocumentTitle'
 import EmptyPlaceHolder from '../EmptyPlaceholder/EmptyPlaceHolder'
 import Headline from '../Headline/Headline'
 import { Optional } from '../types'
@@ -53,14 +54,17 @@ class Thread extends Component<ThreadProps & WithStyles & WithNamespaces> {
   }
 
   @Bind()
-  private _renderItem(data?: Optional<Item>): ReactNode {
-    if (data === undefined) return null
-    if (data === null) return this._empty()
+  private _renderItem(item?: Optional<Item>): ReactNode {
+    if (item === undefined) return null
+    if (item === null) return this._empty()
 
     return (
       <>
-        <Headline id={this.props.id} expanded />
-        {this._renderComments(data)}
+        <DocumentTitle>
+          {this.props.t('title', { context: item.type, ...item })}
+        </DocumentTitle>
+        <Headline item={item} expanded />
+        {this._renderComments(item)}
       </>
     )
   }

@@ -19,7 +19,7 @@ class EmptyPlaceholder extends Component<
         </Grid>
         <Grid item>
           <Typography variant="h4" aria-label={t('shrugLabel')}>
-            {t('shrug')}
+            {t('shared:shrug')}
           </Typography>
         </Grid>
       </Grid>
